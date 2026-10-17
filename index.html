@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matemáticas Simbólicas · 50 idiomas</title>
+<style>
+  :root{
+    --bg:#0b0f17;
+    --panel:#141a26;
+    --panel2:#1b2333;
+    --line:#2a3448;
+    --text:#e7edf8;
+    --muted:#8a97ae;
+    --plus:#4ade80;
+    --minus:#60a5fa;
+    --times:#fbbf24;
+    --div:#f472b6;
+    --accent:#a78bfa;
+    --bad:#f87171;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #1a2338 0%, var(--bg) 60%);
+    color:var(--text);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;
+    padding:28px 16px 60px;
+  }
+  .wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  header h1{
+    margin:0 0 8px;
+    font-size:clamp(24px,4.5vw,38px);
+    letter-spacing:-.5px;
+    font-weight:800;
+  }
+  header p{margin:0;color:var(--muted);line-height:1.55;font-size:15px;max-width:72ch}
+  header b{color:var(--text)}
+
+  .langBox{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#0d131e;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:8px 12px;
+    font-size:14px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .langBox select{
+    background:transparent;
+    border:0;
+    color:var(--text);
+    font:inherit;
+    outline:none;
+    max-width:220px;
+    cursor:pointer;
+  }
+  .langBox select option{background:#141a26;color:var(--text)}
+
+  .panel{
+    background:linear-gradient(180deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.28);
+  }
+  h2{
+    margin:0 0 12px;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:1.4px;
+    color:var(--muted);
+    font-weight:700;
+  }
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:10px}
+
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  input[type=text]{
+    flex:1 1 260px;
+    background:#0d131e;
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:12px;
+    padding:14px 16px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:19px;
+    letter-spacing:1px;
+    outline:none;
+    transition:.15s;
+  }
+  input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.18)}
+  button{
+    cursor:pointer;
+    font-family:inherit;
+    font-weight:700;
+    border-radius:12px;
+    border:1px solid transparent;
+    transition:.15s;
+  }
+  #btnCalc{
+    background:linear-gradient(180deg,#8b6cf6,#6d4fe0);
+    color:#fff;
+    padding:14px 26px;
+    font-size:15px;
+    box-shadow:0 6px 18px rgba(109,79,224,.35);
+  }
+  #btnCalc:hover{filter:brightness(1.1)}
+  #btnCalc:active{transform:translateY(1px)}
+
+  .ejemplos{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;font-size:12.5px;color:var(--muted)}
+  .chip{
+    background:#0d131e;
+    border:1px solid var(--line);
+    color:#c9d4e8;
+    padding:6px 11px;
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;
+    border-radius:999px;
+  }
+  .chip:hover{border-color:var(--accent);color:#fff}
+
+  .linea{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:clamp(20px,4vw,30px);
+    padding:6px 2px 12px;
+    letter-spacing:1px;
+  }
+  .linea .sym{color:#dbe4f5}
+  .linea .op{color:var(--accent);opacity:.95}
+  .linea .eq{color:var(--muted);font-weight:400}
+  .res-ok{
+    color:#0b0f17;
+    background:linear-gradient(180deg,#7ef0a8,#3ecf7e);
+    padding:2px 16px;
+    border-radius:12px;
+    font-weight:800;
+    box-shadow:0 6px 20px rgba(62,207,126,.3);
+  }
+  .res-no{
+    color:#2a0d0d;
+    background:linear-gradient(180deg,#ff9a9a,#f0616a);
+    padding:2px 16px;
+    border-radius:12px;
+    font-weight:800;
+  }
+  .nota{font-size:14px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:12px}
+  .nota b{color:var(--text)}
+  .nota.no{color:#f2a2a2}
+
+  .catalogo{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(104px,1fr));
+    gap:10px;
+  }
+  .card-sym{
+    background:#0d131e;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 8px 10px;
+    text-align:center;
+    transition:.15s;
+  }
+  .card-sym:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .glyph{
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:26px;
+    font-weight:700;
+    line-height:1.15;
+    margin-bottom:8px;
+    word-break:break-all;
+  }
+  .comp{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;font-size:11px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .comp span{padding:2px 6px;border-radius:6px;font-weight:700}
+  .c-plus{background:rgba(74,222,128,.14);color:var(--plus)}
+  .c-minus{background:rgba(96,165,250,.14);color:var(--minus)}
+  .c-times{background:rgba(251,191,36,.14);color:var(--times)}
+  .c-div{background:rgba(244,114,182,.14);color:var(--div)}
+
+  .grid{display:grid;grid-template-columns:1.55fr 1fr;gap:18px}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}}
+
+  .campo{margin-bottom:12px}
+  .campo input[type=text]{
+    width:100%;font-size:20px;padding:11px 14px;text-align:center;
+  }
+  .partes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .partes label{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    margin:0;font-size:12px;font-weight:700;
+  }
+  .partes input[type=number]{
+    width:100%;
+    background:#0d131e;border:1px solid var(--line);color:var(--text);
+    border-radius:10px;padding:9px;text-align:center;font-size:16px;
+    font-family:ui-monospace,Menlo,Consolas,monospace;outline:none;
+  }
+  .partes input[type=number]:focus{border-color:var(--accent)}
+  #btnAdd{
+    width:100%;margin-top:14px;padding:12px;
+    background:#22304a;color:#cfe0ff;border:1px solid var(--line);
+    font-size:14px;
+  }
+  #btnAdd:hover{border-color:var(--accent);color:#fff}
+  #msgNuevo{font-size:13px;margin-top:10px;min-height:18px;color:var(--muted)}
+  #msgNuevo.err{color:var(--bad)}
+  #msgNuevo.ok{color:var(--plus)}
+
+  ul.reglas{margin:0;padding-left:20px;color:var(--muted);line-height:1.75;font-size:14px}
+  ul.reglas b{color:var(--text)}
+  code{
+    background:#0d131e;border:1px solid var(--line);border-radius:6px;
+    padding:1px 6px;font-family:ui-monospace,Menlo,Consolas,monospace;
+    color:#cfe0ff;font-size:13px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="topbar">
+      <div>
+        <h1 id="appTitle" data-i18n="appName">Matemáticas Simbólicas</h1>
+        <p id="intro" data-i18n="intro">Cada símbolo está hecho de partes: +, -, x y /. Se opera con esas partes y el resultado debe ser un solo símbolo existente. Si la composición resultante no tiene símbolo… No definido.</p>
+      </div>
+      <label class="langBox">
+        🌐
+        <select id="lang" aria-label="Idioma"></select>
+      </label>
+    </div>
+  </header>
+
+  <section class="panel">
+    <label for="expr" data-i18n="labelExpr">Escribe tu operación — los operadores van entre comillas</label>
+    <div class="row">
+      <input id="expr" type="text" value='++ "+" ++' spellcheck="false" autocomplete="off" autocapitalize="off">
+      <button id="btnCalc" data-i18n="btnCalc">Calcular</button>
+    </div>
+    <div class="ejemplos">
+      <span data-i18n="examples">Prueba:</span>
+      <button class="chip" data-ex='++ "+" ++'>++ "+" ++</button>
+      <button class="chip" data-ex='# "-" ++'># "-" ++</button>
+      <button class="chip" data-ex='++ "x" ++'>++ "x" ++</button>
+      <button class="chip" data-ex='## "/" ++'>## "/" ++</button>
+      <button class="chip" data-ex='+ "-" -'>+ "-" -</button>
+      <button class="chip" data-ex='++ "+" #'>++ "+" #</button>
+    </div>
+  </section>
+
+  <section class="panel" id="resultado"></section>
+
+  <div class="grid">
+    <section class="panel">
+      <h2 data-i18n="catalogHeading">Catálogo de símbolos</h2>
+      <div id="catalogo" class="catalogo"></div>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="createHeading">Crear símbolo</h2>
+      <div class="campo">
+        <input id="nuevoSimbolo" type="text" maxlength="4" placeholder="Símbolo" spellcheck="false" autocomplete="off" data-i18n-placeholder="symbolPlaceholder">
+      </div>
+      <div class="partes">
+        <label>+ <input id="nPlus" type="number" min="0" max="99" value="0"></label>
+        <label>- <input id="nMinus" type="number" min="0" max="99" value="0"></label>
+        <label>x <input id="nTimes" type="number" min="0" max="99" value="0"></label>
+        <label>/ <input id="nDiv" type="number" min="0" max="99" value="0"></label>
+      </div>
+      <button id="btnAdd" data-i18n="btnAdd">Añadir al catálogo</button>
+      <div id="msgNuevo"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2 data-i18n="rulesHeading">Reglas del sistema</h2>
+    <ul class="reglas">
+      <li data-i18n="rule1">Un símbolo es una composición de partes: # = 4 partes de +; ± = 1 de + y 1 de -.</li>
+      <li data-i18n="rule2">Los operadores se escriben entre comillas dobles: "+", "-", "x", "/".</li>
+      <li data-i18n="rule3">Se opera parte por parte: la suma suma, el producto multiplica, la división divide (debe ser exacta).</li>
+      <li data-i18n="rule4">El resultado tiene que ser un único símbolo del catálogo. Si no existe → No definido.</li>
+      <li data-i18n="rule5">Se evalúa de izquierda a derecha, y cada paso intermedio también debe dar un símbolo válido.</li>
+    </ul>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     50 IDIOMAS
+     ========================================================= */
+  const LANGS = [
+    ["es","Español"],["en","English"],["pt","Português"],["fr","Français"],["de","Deutsch"],
+    ["it","Italiano"],["nl","Nederlands"],["pl","Polski"],["cs","Čeština"],["sk","Slovenčina"],
+    ["hu","Magyar"],["ro","Română"],["bg","Български"],["uk","Українська"],["ru","Русский"],
+    ["sr","Српски"],["hr","Hrvatski"],["sl","Slovenščina"],["bs","Bosanski"],["mk","Македонски"],
+    ["sq","Shqip"],["el","Ελληνικά"],["tr","Türkçe"],["az","Azərbaycan"],["kk","Қазақша"],
+    ["uz","Oʻzbekcha"],["ky","Кыргызча"],["tt","Татарча"],["hy","Հայերեն"],["ka","ქართული"],
+    ["he","עברית"],["ar","العربية"],["fa","فارسی"],["ur","اردو"],["hi","हिन्दी"],
+    ["bn","বাংলা"],["pa","ਪੰਜਾਬੀ"],["gu","ગુજરાતી"],["mr","मराठी"],["ta","தமிழ்"],
+    ["te","తెలుగు"],["kn","ಕನ್ನಡ"],["ml","മലയാളം"],["si","සිංහල"],["th","ไทย"],
+    ["vi","Tiếng Việt"],["id","Bahasa Indonesia"],["ja","日本語"],["ko","한국어"],["zh","中文"]
+  ];
+
+  const RTL = ["ar","he","fa","ur"];
+
+  const I18N = {
+    es:{
+      appName:"Matemáticas Simbólicas",
+      intro:"Cada símbolo está hecho de partes: +, -, x y /. Se opera con esas partes y el resultado debe ser un solo símbolo existente. Si la composición resultante no tiene símbolo… No definido.",
+      labelExpr:"Escribe tu operación — los operadores van entre comillas",
+      btnCalc:"Calcular",
+      examples:"Prueba:",
+      catalogHeading:"Catálogo de símbolos",
+      createHeading:"Crear símbolo",
+      symbolPlaceholder:"Símbolo",
+      btnAdd:"Añadir al catálogo",
+      rulesHeading:"Reglas del sistema",
+      noDefined:"No definido",
+      empty:"vacío",
+      resultComposition:"Composición del resultado:",
+      rule1:"Un símbolo es una composición de partes: # = 4 partes de +; ± = 1 de + y 1 de -.",
+      rule2:"Los operadores se escriben entre comillas dobles: \"+\", \"-\", \"x\", \"/\".",
+      rule3:"Se opera parte por parte: la suma suma, el producto multiplica, la división divide (debe ser exacta).",
+      rule4:"El resultado tiene que ser un único símbolo del catálogo. Si no existe → No definido.",
+      rule5:"Se evalúa de izquierda a derecha, y cada paso intermedio también debe dar un símbolo válido.",
+      msgInvalidSymbol:"Símbolo inválido: 1 a 4 caracteres, sin espacios ni comillas.",
+      msgAlreadyExists:"El símbolo «{sym}» ya existe en el catálogo.",
+      msgNeedPart:"El símbolo necesita al menos una parte (+, -, x o /).",
+      msgAdded:"¡Símbolo «{sym}» añadido al catálogo!",
+      msgAddedDuplicate:"Añadido, pero su composición es idéntica a «{existing}» (se usará «{existing}» al calcular).",
+      reasonQuote:"Hay una comilla sin cerrar.",
+      reasonEmpty:"Escribe una operación.",
+      reasonExpectedOp:"Falta un operador entre comillas en la posición {pos}.",
+      reasonExpectedSym:"Se esperaba un símbolo en la posición {pos}.",
+      reasonEndsOp:"La expresión termina en un operador: falta el símbolo final.",
+      reasonUnknownSym:"El símbolo «{sym}» no existe en el catálogo.",
+      reasonInvalidOp:"«{op}» no es un operador válido. Usa \"+\", \"-\", \"x\" o \"/\".",
+      reasonInvalidComposition:"La operación {a} \"{op}\" {b} no produce una composición válida.",
+      reasonNoSymbol:"La operación {a} \"{op}\" {b} da una composición que no corresponde a ningún símbolo."
+    },
+    en:{
+      appName:"Symbolic Mathematics",
+      intro:"Each symbol is made of parts: +, -, x and /. You operate with those parts and the result must be a single existing symbol. If the resulting composition has no symbol… Undefined.",
+      labelExpr:"Write your operation — operators go inside quotes",
+      btnCalc:"Calculate",
+      examples:"Try:",
+      catalogHeading:"Symbol catalog",
+      createHeading:"Create symbol",
+      symbolPlaceholder:"Symbol",
+      btnAdd:"Add to catalog",
+      rulesHeading:"System rules",
+      noDefined:"Undefined",
+      empty:"empty",
+      resultComposition:"Result composition:",
+      rule1:"A symbol is a composition of parts: # = 4 parts of +; ± = 1 of + and 1 of -.",
+      rule2:"Operators are written in double quotes: \"+\", \"-\", \"x\", \"/\".",
+      rule3:"Operations are done part by part: addition adds, multiplication multiplies, division divides (must be exact).",
+      rule4:"The result must be a single symbol from the catalog. If it does not exist → Undefined.",
+      rule5:"Evaluated left to right, and every intermediate step must also be a valid symbol.",
+      msgInvalidSymbol:"Invalid symbol: 1 to 4 characters, no spaces or quotes.",
+      msgAlreadyExists:"The symbol «{sym}» already exists in the catalog.",
+      msgNeedPart:"The symbol needs at least one part (+, -, x or /).",
+      msgAdded:"Symbol «{sym}» added to the catalog!",
+      msgAddedDuplicate:"Added, but its composition is identical to «{existing}» (the calculation will use «{existing}»).",
+      reasonQuote:"There is an unclosed quote.",
+      reasonEmpty:"Write an operation.",
+      reasonExpectedOp:"Missing a quoted operator at position {pos}.",
+      reasonExpectedSym:"Expected a symbol at position {pos}.",
+      reasonEndsOp:"The expression ends with an operator: the final symbol is missing.",
+      reasonUnknownSym:"The symbol «{sym}» does not exist in the catalog.",
+      reasonInvalidOp:"«{op}» is not a valid operator. Use \"+\", \"-\", \"x\" or \"/\".",
+      reasonInvalidComposition:"The operation {a} \"{op}\" {b} does not produce a valid composition.",
+      reasonNoSymbol:"The operation {a} \"{op}\" {b} gives a composition that matches no symbol."
+    },
+    pt:{appName:"Matemática Simbólica",intro:"Cada símbolo é feito de partes: +, -, x e /. Opera-se com essas partes e o resultado deve ser um único símbolo existente. Se a composição resultante não tiver símbolo… Não definido.",labelExpr:"Escreve a tua operação — os operadores vão entre aspas",btnCalc:"Calcular",examples:"Experimenta:",catalogHeading:"Catálogo de símbolos",createHeading:"Criar símbolo",symbolPlaceholder:"Símbolo",btnAdd:"Adicionar ao catálogo",rulesHeading:"Regras do sistema",noDefined:"Não definido",empty:"vazio",resultComposition:"Composição do resultado:"},
+    fr:{appName:"Mathématiques Symboliques",intro:"Chaque symbole est composé de parties : +, -, x et /. On opère avec ces parties et le résultat doit être un seul symbole existant. Si la composition obtenue n’a pas de symbole… Non défini.",labelExpr:"Écris ton opération — les opérateurs vont entre guillemets",btnCalc:"Calculer",examples:"Essaie :",catalogHeading:"Catalogue de symboles",createHeading:"Créer un symbole",symbolPlaceholder:"Symbole",btnAdd:"Ajouter au catalogue",rulesHeading:"Règles du système",noDefined:"Non défini",empty:"vide",resultComposition:"Composition du résultat :"},
+    de:{appName:"Symbolische Mathematik",intro:"Jedes Symbol besteht aus Teilen: +, -, x und /. Mit diesen Teilen wird gerechnet, und das Ergebnis muss ein einzelnes vorhandenes Symbol sein. Gibt es für die Zusammensetzung kein Symbol … Nicht definiert.",labelExpr:"Schreibe deine Operation — Operatoren in Anführungszeichen",btnCalc:"Berechnen",examples:"Probiere:",catalogHeading:"Symbolkatalog",createHeading:"Symbol erstellen",symbolPlaceholder:"Symbol",btnAdd:"Zum Katalog hinzufügen",rulesHeading:"Systemregeln",noDefined:"Nicht definiert",empty:"leer",resultComposition:"Zusammensetzung des Ergebnisses:"},
+    it:{appName:"Matematica Simbolica",intro:"Ogni simbolo è formato da parti: +, -, x e /. Si opera con queste parti e il risultato deve essere un unico simbolo esistente. Se la composizione ottenuta non ha simbolo… Non definito.",labelExpr:"Scrivi la tua operazione — gli operatori vanno tra virgolette",btnCalc:"Calcola",examples:"Prova:",catalogHeading:"Catalogo dei simboli",createHeading:"Crea simbolo",symbolPlaceholder:"Simbolo",btnAdd:"Aggiungi al catalogo",rulesHeading:"Regole del sistema",noDefined:"Non definito",empty:"vuoto",resultComposition:"Composizione del risultato:"},
+    nl:{appName:"Symbolische Wiskunde",intro:"Elk symbool bestaat uit delen: +, -, x en /. Je rekent met die delen en het resultaat moet één bestaand symbool zijn. Als de samenstelling geen symbool heeft… Niet gedefinieerd.",labelExpr:"Schrijf je bewerking — operatoren tussen aanhalingstekens",btnCalc:"Berekenen",examples:"Probeer:",catalogHeading:"Symbolencatalogus",createHeading:"Symbool maken",symbolPlaceholder:"Symbool",btnAdd:"Toevoegen aan catalogus",rulesHeading:"Systeemregels",noDefined:"Niet gedefinieerd",empty:"leeg",resultComposition:"Samenstelling van het resultaat:"},
+    pl:{appName:"Matematyka Symboliczna",intro:"Każdy symbol składa się z części: +, -, x i /. Działania wykonuje się na tych częściach, a wynik musi być jednym istniejącym symbolem. Jeśli wynikowa kompozycja nie ma symbolu… Niezdefiniowane.",labelExpr:"Wpisz działanie — operatory w cudzysłowach",btnCalc:"Oblicz",examples:"Wypróbuj:",catalogHeading:"Katalog symboli",createHeading:"Utwórz symbol",symbolPlaceholder:"Symbol",btnAdd:"Dodaj do katalogu",rulesHeading:"Zasady systemu",noDefined:"Niezdefiniowane",empty:"puste",resultComposition:"Skład wyniku:"},
+    cs:{appName:"Symbolická matematika",intro:"Každý symbol se skládá z částí: +, -, x a /. Počítá se s těmito částmi a výsledek musí být jediný existující symbol. Pokud výsledná skladba nemá symbol… Nedefinováno.",labelExpr:"Napiš operaci — operátory v uvozovkách",btnCalc:"Vypočítat",examples:"Vyzkoušej:",catalogHeading:"Katalog symbolů",createHeading:"Vytvořit symbol",symbolPlaceholder:"Symbol",btnAdd:"Přidat do katalogu",rulesHeading:"Pravidla systému",noDefined:"Nedefinováno",empty:"prázdné",resultComposition:"Složení výsledku:"},
+    sk:{appName:"Symbolická matematika",intro:"Každý symbol sa skladá z častí: +, -, x a /. Počíta sa s týmito časťami a výsledok musí byť jediný existujúci symbol. Ak výsledná skladba nemá symbol… Nedefinované.",labelExpr:"Napíš operáciu — operátory v úvodzovkách",btnCalc:"Vypočítať",examples:"Vyskúšaj:",catalogHeading:"Katalóg symbolov",createHeading:"Vytvoriť symbol",symbolPlaceholder:"Symbol",btnAdd:"Pridať do katalógu",rulesHeading:"Pravidlá systému",noDefined:"Nedefinované",empty:"prázdne",resultComposition:"Zloženie výsledku:"},
+    hu:{appName:"Szimbolikus matematika",intro:"Minden szimbólum részekből áll: +, -, x és /. Ezekkel a részekkel végzünk műveleteket, és az eredménynek egyetlen létező szimbólumnak kell lennie. Ha a kapott összetételhez nincs szimbólum… Nem definiált.",labelExpr:"Írd be a műveletet — az operátorok idézőjelben",btnCalc:"Számítás",examples:"Próbáld:",catalogHeading:"Szimbólumkatalógus",createHeading:"Szimbólum létrehozása",symbolPlaceholder:"Szimbólum",btnAdd:"Hozzáadás a katalógushoz",rulesHeading:"Rendszerszabályok",noDefined:"Nem definiált",empty:"üres",resultComposition:"Az eredmény összetétele:"},
+    ro:{appName:"Matematică simbolică",intro:"Fiecare simbol este format din părți: +, -, x și /. Se operează cu aceste părți, iar rezultatul trebuie să fie un singur simbol existent. Dacă compoziția rezultată nu are simbol… Nedefinit.",labelExpr:"Scrie operația — operatorii între ghilimele",btnCalc:"Calculează",examples:"Încearcă:",catalogHeading:"Catalog de simboluri",createHeading:"Creează simbol",symbolPlaceholder:"Simbol",btnAdd:"Adaugă în catalog",rulesHeading:"Regulile sistemului",noDefined:"Nedefinit",empty:"gol",resultComposition:"Compoziția rezultatului:"},
+    bg:{appName:"Символна математика",intro:"Всеки символ се състои от части: +, -, x и /. Операциите се извършват с тези части и резултатът трябва да е един съществуващ символ. Ако получената композиция няма символ… Неопределено.",labelExpr:"Напиши операцията — операторите в кавички",btnCalc:"Изчисли",examples:"Опитай:",catalogHeading:"Каталог на символите",createHeading:"Създай символ",symbolPlaceholder:"Символ",btnAdd:"Добави в каталога",rulesHeading:"Правила на системата",noDefined:"Неопределено",empty:"празно",resultComposition:"Състав на резултата:"},
+    uk:{appName:"Символьна математика",intro:"Кожен символ складається з частин: +, -, x і /. Операції виконуються з цими частинами, а результат має бути єдиним наявним символом. Якщо отримана композиція не має символу… Не визначено.",labelExpr:"Введи операцію — оператори в лапках",btnCalc:"Обчислити",examples:"Спробуй:",catalogHeading:"Каталог символів",createHeading:"Створити символ",symbolPlaceholder:"Символ",btnAdd:"Додати до каталогу",rulesHeading:"Правила системи",noDefined:"Не визначено",empty:"порожньо",resultComposition:"Склад результату:"},
+    ru:{appName:"Символьная математика",intro:"Каждый символ состоит из частей: +, -, x и /. Операции выполняются с этими частями, а результат должен быть единственным существующим символом. Если полученная композиция не имеет символа… Не определено.",labelExpr:"Введи операцию — операторы в кавычках",btnCalc:"Вычислить",examples:"Попробуй:",catalogHeading:"Каталог символов",createHeading:"Создать символ",symbolPlaceholder:"Символ",btnAdd:"Добавить в каталог",rulesHeading:"Правила системы",noDefined:"Не определено",empty:"пусто",resultComposition:"Состав результата:"},
+    sr:{appName:"Симболичка математика",intro:"Сваки симбол се састоји од делова: +, -, x и /. Операције се изводе са тим деловима, а резултат мора бити један постојећи симбол. Ако добијена композиција нема симбол… Није дефинисано.",labelExpr:"Упиши операцију — оператори под наводницима",btnCalc:"Израчунај",examples:"Пробај:",catalogHeading:"Каталог симбола",createHeading:"Направи симбол",symbolPlaceholder:"Симбол",btnAdd:"Додај у каталог",rulesHeading:"Правила система",noDefined:"Није дефинисано",empty:"празно",resultComposition:"Састав резултата:"},
+    hr:{appName:"Simbolička matematika",intro:"Svaki se simbol sastoji od dijelova: +, -, x i /. Operacije se izvode s tim dijelovima, a rezultat mora biti jedan postojeći simbol. Ako dobiveni sastav nema simbol… Nedefinirano.",labelExpr:"Upiši operaciju — operatori pod navodnicima",btnCalc:"Izračunaj",examples:"Pokušaj:",catalogHeading:"Katalog simbola",createHeading:"Stvori simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj u katalog",rulesHeading:"Pravila sustava",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sastav rezultata:"},
+    sl:{appName:"Simbolična matematika",intro:"Vsak simbol je sestavljen iz delov: +, -, x in /. Operacije se izvajajo s temi deli, rezultat pa mora biti en obstoječi simbol. Če dobljena sestava nima simbola… Nedefinirano.",labelExpr:"Vpiši operacijo — operatorji v narekovajih",btnCalc:"Izračunaj",examples:"Poskusi:",catalogHeading:"Katalog simbolov",createHeading:"Ustvari simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj v katalog",rulesHeading:"Pravila sistema",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sestava rezultata:"},
+    bs:{appName:"Simbolička matematika",intro:"Svaki simbol se sastoji od dijelova: +, -, x i /. Operacije se izvode s tim dijelovima, a rezultat mora biti jedan postojeći simbol. Ako dobijeni sastav nema simbol… Nedefinirano.",labelExpr:"Upiši operaciju — operatori pod navodnicima",btnCalc:"Izračunaj",examples:"Pokušaj:",catalogHeading:"Katalog simbola",createHeading:"Napravi simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj u katalog",rulesHeading:"Pravila sistema",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sastav rezultata:"},
+    mk:{appName:"Симболична математика",intro:"Секој симбол се состои од делови: +, -, x и /. Операциите се изведуваат со тие делови, а резултатот мора да биде еден постоечки симбол. Ако добиената композиција нема симбол… Недефинирано.",labelExpr:"Внеси операција — операторите во наводници",btnCalc:"Пресметај",examples:"Пробај:",catalogHeading:"Каталог на симболи",createHeading:"Создај симбол",symbolPlaceholder:"Симбол",btnAdd:"Додај во каталогот",rulesHeading:"Правила на системот",noDefined:"Недефинирано",empty:"празно",resultComposition:"Состав на резултатот:"},
+    sq:{appName:"Matematikë simbolike",intro:"Çdo simbol përbëhet nga pjesë: +, -, x dhe /. Veprohet me këto pjesë dhe rezultati duhet të jetë një simbol i vetëm ekzistues. Nëse përbërja e marrë nuk ka simbol… E padefinuar.",labelExpr:"Shkruaj veprimin — operatorët mes thonjëzave",btnCalc:"Llogarit",examples:"Provo:",catalogHeading:"Katalogu i simboleve",createHeading:"Krijo simbol",symbolPlaceholder:"Simbol",btnAdd:"Shto në katalog",rulesHeading:"Rregullat e sistemit",noDefined:"E padefinuar",empty:"bosh",resultComposition:"Përbërja e rezultatit:"},
+    el:{appName:"Συμβολικά Μαθηματικά",intro:"Κάθε σύμβολο αποτελείται από μέρη: +, -, x και /. Οι πράξεις γίνονται με αυτά τα μέρη και το αποτέλεσμα πρέπει να είναι ένα υπάρχον σύμβολο. Αν η σύνθεση δεν έχει σύμβολο… Μη ορισμένο.",labelExpr:"Γράψε την πράξη — οι τελεστές σε εισαγωγικά",btnCalc:"Υπολογισμός",examples:"Δοκίμασε:",catalogHeading:"Κατάλογος συμβόλων",createHeading:"Δημιουργία συμβόλου",symbolPlaceholder:"Σύμβολο",btnAdd:"Προσθήκη στον κατάλογο",rulesHeading:"Κανόνες συστήματος",noDefined:"Μη ορισμένο",empty:"κενό",resultComposition:"Σύνθεση αποτελέσματος:"},
+    tr:{appName:"Sembolik Matematik",intro:"Her sembol parçalardan oluşur: +, -, x ve /. Bu parçalarla işlem yapılır ve sonuç tek bir mevcut sembol olmalıdır. Oluşan bileşimin sembolü yoksa… Tanımsız.",labelExpr:"İşlemini yaz — operatörler tırnak içinde",btnCalc:"Hesapla",examples:"Dene:",catalogHeading:"Sembol kataloğu",createHeading:"Sembol oluştur",symbolPlaceholder:"Sembol",btnAdd:"Kataloğa ekle",rulesHeading:"Sistem kuralları",noDefined:"Tanımsız",empty:"boş",resultComposition:"Sonucun bileşimi:"},
+    az:{appName:"Simvolik Riyaziyyat",intro:"Hər simvol hissələrdən ibarətdir: +, -, x və /. Bu hissələrlə əməliyyat aparılır və nəticə mövcud olan tək simvol olmalıdır. Alınan birləşmənin simvolu yoxdursa… Təyin olunmayıb.",labelExpr:"Əməliyyatı yaz — operatorlar dırnaq içində",btnCalc:"Hesabla",examples:"Yoxla:",catalogHeading:"Simvollar kataloqu",createHeading:"Simvol yarat",symbolPlaceholder:"Simvol",btnAdd:"Kataloqa əlavə et",rulesHeading:"Sistem qaydaları",noDefined:"Təyin olunmayıb",empty:"boş",resultComposition:"Nəticənin tərkibi:"},
+    kk:{appName:"Символдық математика",intro:"Әр символ бөліктерден тұрады: +, -, x және /. Осы бөліктермен амалдар орындалады, нәтиже бір ғана бар символ болуы керек. Алынған құрамда символ болмаса… Анықталмаған.",labelExpr:"Амалды жаз — операторлар тырнақшада",btnCalc:"Есептеу",examples:"Байқап көр:",catalogHeading:"Символдар каталогы",createHeading:"Символ жасау",symbolPlaceholder:"Символ",btnAdd:"Каталогқа қосу",rulesHeading:"Жүйе ережелері",noDefined:"Анықталмаған",empty:"бос",resultComposition:"Нәтиженің құрамы:"},
+    uz:{appName:"Simvolik matematika",intro:"Har bir simvol qismlardan iborat: +, -, x va /. Shu qismlar bilan amal bajariladi va natija bitta mavjud simvol bo‘lishi kerak. Hosil bo‘lgan tarkibda simvol bo‘lmasa… Aniqlanmagan.",labelExpr:"Amalni yoz — operatorlar qo‘shtirnoq ichida",btnCalc:"Hisoblash",examples:"Sinab ko‘r:",catalogHeading:"Simvollar katalogi",createHeading:"Simvol yaratish",symbolPlaceholder:"Simvol",btnAdd:"Katalogga qo‘shish",rulesHeading:"Tizim qoidalari",noDefined:"Aniqlanmagan",empty:"bo‘sh",resultComposition:"Natija tarkibi:"},
+    ky:{appName:"Символдук математика",intro:"Ар бир символ бөлүктөрдөн турат: +, -, x жана /. Бул бөлүктөр менен амалдар аткарылат, натыйжа бир гана бар символ болушу керек. Алынган курамда символ жок болсо… Аныкталган эмес.",labelExpr:"Амалды жаз — операторлор тырмакчада",btnCalc:"Эсептөө",examples:"Сынап көр:",catalogHeading:"Символдор каталогу",createHeading:"Символ жасоо",symbolPlaceholder:"Символ",btnAdd:"Каталогго кошуу",rulesHeading:"Система эрежелери",noDefined:"Аныкталган эмес",empty:"бош",resultComposition:"Натыйжанын курамы:"},
+    tt:{appName:"Символлык математика",intro:"Һәр символ өлешләрдән тора: +, -, x һәм /. Бу өлешләр белән гамәлләр башкарыла, нәтиҗә бер генә булган символ булырга тиеш. Алынган составта символ булмаса… Билгеләнмәгән.",labelExpr:"Гамәлне яз — операторлар тырнак эчендә",btnCalc:"Исәпләү",examples:"Сынап кара:",catalogHeading:"Символлар каталогы",createHeading:"Символ ясау",symbolPlaceholder:"Символ",btnAdd:"Каталогка өстәү",rulesHeading:"Система кагыйдәләре",noDefined:"Билгеләнмәгән",empty:"буш",resultComposition:"Нәтиҗә составы:"},
+    hy:{appName:"Սիմվոլային մաթեմատիկա",intro:"Յուրաքանչյուր սիմվոլ կազմված է մասերից՝ +, -, x և /. Գործողությունները կատարվում են այդ մասերով, իսկ արդյունքը պետք է լինի մեկ գոյություն ունեցող սիմվոլ։ Եթե ստացված կազմը սիմվոլ չունի… Չսահմանված։",labelExpr:"Գրիր գործողությունը — օպերատորները չակերտների մեջ",btnCalc:"Հաշվել",examples:"Փորձիր՝",catalogHeading:"Սիմվոլների կատալոգ",createHeading:"Ստեղծել սիմվոլ",symbolPlaceholder:"Սիմվոլ",btnAdd:"Ավելացնել կատալոգ",rulesHeading:"Համակարգի կանոններ",noDefined:"Չսահմանված",empty:"դատարկ",resultComposition:"Արդյունքի կազմը՝"},
+    ka:{appName:"სიმბოლური მათემატიკა",intro:"თითოეული სიმბოლო შედგება ნაწილებისგან: +, -, x და /. ოპერაციები ამ ნაწილებით სრულდება და შედეგი უნდა იყოს ერთი არსებული სიმბოლო. თუ მიღებულ შემადგენლობას სიმბოლო არ აქვს… განუსაზღვრელი.",labelExpr:"ჩაწერე ოპერაცია — ოპერატორები ბრჭყალებში",btnCalc:"გამოთვლა",examples:"სცადე:",catalogHeading:"სიმბოლოების კატალოგი",createHeading:"სიმბოლოს შექმნა",symbolPlaceholder:"სიმბოლო",btnAdd:"კატალოგში დამატება",rulesHeading:"სისტემის წესები",noDefined:"განუსაზღვრელი",empty:"ცარიელი",resultComposition:"შედეგის შემადგენლობა:"},
+    he:{appName:"מתמטיקה סמלית",intro:"כל סמל מורכב מחלקים: +, -, x ו־/. פועלים עם החלקים האלה והתוצאה חייבת להיות סמל קיים אחד. אם להרכב המתקבל אין סמל… לא מוגדר.",labelExpr:"כתוב את הפעולה — האופרטורים במרכאות",btnCalc:"חשב",examples:"נסה:",catalogHeading:"קטלוג סמלים",createHeading:"יצירת סמל",symbolPlaceholder:"סמל",btnAdd:"הוסף לקטלוג",rulesHeading:"כללי המערכת",noDefined:"לא מוגדר",empty:"ריק",resultComposition:"הרכב התוצאה:"},
+    ar:{appName:"الرياضيات الرمزية",intro:"كل رمز يتكون من أجزاء: + و - و x و /. تُجرى العمليات على هذه الأجزاء، ويجب أن تكون النتيجة رمزًا واحدًا موجودًا. إذا لم يكن للتركيب الناتج رمز… غير معرّف.",labelExpr:"اكتب عمليتك — توضع المعاملات بين علامتي اقتباس",btnCalc:"احسب",examples:"جرّب:",catalogHeading:"فهرس الرموز",createHeading:"إنشاء رمز",symbolPlaceholder:"رمز",btnAdd:"أضف إلى الفهرس",rulesHeading:"قواعد النظام",noDefined:"غير معرّف",empty:"فارغ",resultComposition:"تركيب النتيجة:"},
+    fa:{appName:"ریاضیات نمادی",intro:"هر نماد از بخش‌ها ساخته می‌شود: +، -، x و /. با این بخش‌ها عمل می‌کنیم و نتیجه باید یک نماد موجود باشد. اگر ترکیب به‌دست‌آمده نماد نداشته باشد… تعریف‌نشده.",labelExpr:"عملیات را بنویس — عملگرها داخل گیومه",btnCalc:"محاسبه",examples:"امتحان کن:",catalogHeading:"فهرست نمادها",createHeading:"ساخت نماد",symbolPlaceholder:"نماد",btnAdd:"افزودن به فهرست",rulesHeading:"قواعد سیستم",noDefined:"تعریف‌نشده",empty:"خالی",resultComposition:"ترکیب نتیجه:"},
+    ur:{appName:"علامتی ریاضیات",intro:"ہر علامت حصوں سے بنتی ہے: +، -، x اور /. ان حصوں سے عمل کیا جاتا ہے اور نتیجہ ایک موجود علامت ہونا چاہیے۔ اگر بننے والی ترکیب کی علامت نہ ہو… غیر متعین۔",labelExpr:"اپنا عمل لکھیں — آپریٹرز اقتباس میں",btnCalc:"حساب کریں",examples:"آزمائیں:",catalogHeading:"علامتوں کی فہرست",createHeading:"علامت بنائیں",symbolPlaceholder:"علامت",btnAdd:"فہرست میں شامل کریں",rulesHeading:"نظام کے قواعد",noDefined:"غیر متعین",empty:"خالی",resultComposition:"نتیجے کی ترکیب:"},
+    hi:{appName:"प्रतीकात्मक गणित",intro:"हर प्रतीक भागों से बनता है: +, -, x और /. इन भागों से क्रिया की जाती है और परिणाम एक ही मौजूद प्रतीक होना चाहिए। अगर बनी संरचना का प्रतीक न हो… अपरिभाषित।",labelExpr:"अपनी क्रिया लिखें — ऑपरेटर उद्धरण चिह्नों में",btnCalc:"गणना करें",examples:"आज़माएँ:",catalogHeading:"प्रतीक सूची",createHeading:"प्रतीक बनाएँ",symbolPlaceholder:"प्रतीक",btnAdd:"सूची में जोड़ें",rulesHeading:"सिस्टम के नियम",noDefined:"अपरिभाषित",empty:"खाली",resultComposition:"परिणाम की संरचना:"},
+    bn:{appName:"প্রতীকী গণিত",intro:"প্রতিটি প্রতীক অংশ দিয়ে তৈরি: +, -, x এবং /. এই অংশগুলো দিয়ে কাজ করা হয় এবং ফলাফল অবশ্যই একটি বিদ্যমান প্রতীক হতে হবে। যদি তৈরি 구성ে প্রতীক না থাকে… অনির্ধারিত।",labelExpr:"তোমার কাজ লেখো — অপারেটরগুলো উদ্ধৃতি চিহ্নে",btnCalc:"গণনা করো",examples:"চেষ্টা করো:",catalogHeading:"প্রতীক তালিকা",createHeading:"প্রতীক তৈরি করো",symbolPlaceholder:"প্রতীক",btnAdd:"তালিকায় যোগ করো",rulesHeading:"সিস্টেমের নিয়ম",noDefined:"অনির্ধারিত",empty:"খালি",resultComposition:"ফলাফলের 구성:"},
+    pa:{appName:"ਪ੍ਰਤੀਕਾਤਮਕ ਗਣਿਤ",intro:"ਹਰ ਪ੍ਰਤੀਕ ਹਿੱਸਿਆਂ ਨਾਲ ਬਣਦਾ ਹੈ: +, -, x ਅਤੇ /. ਇਨ੍ਹਾਂ ਹਿੱਸਿਆਂ ਨਾਲ ਕੰਮ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਅਤੇ ਨਤੀਜਾ ਇੱਕ ਮੌਜੂਦ ਪ੍ਰਤੀਕ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ। ਜੇ ਬਣੀ ਬਣਤਰ ਦਾ ਪ੍ਰਤੀਕ ਨਾ ਹੋਵੇ… ਅਣ-ਪਰਿਭਾਸ਼ਿਤ।",labelExpr:"ਆਪਣੀ ਕਿਰਿਆ ਲਿਖੋ — ਆਪਰੇਟਰ ਉਧਰਣ ਚਿੰਨ੍ਹਾਂ ਵਿੱਚ",btnCalc:"ਗਿਣੋ",examples:"ਆਜ਼ਮਾਓ:",catalogHeading:"ਪ੍ਰਤੀਕ ਸੂਚੀ",createHeading:"ਪ੍ਰਤੀਕ ਬਣਾਓ",symbolPlaceholder:"ਪ੍ਰਤੀਕ",btnAdd:"ਸੂਚੀ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ",rulesHeading:"ਸਿਸਟਮ ਦੇ ਨਿਯਮ",noDefined:"ਅਣ-ਪਰਿਭਾਸ਼ਿਤ",empty:"ਖਾਲੀ",resultComposition:"ਨਤੀਜੇ ਦੀ ਬਣਤਰ:"},
+    gu:{appName:"પ્રતીકાત્મક ગણિત",intro:"દરેક પ્રતીક ભાગોથી બને છે: +, -, x અને /. આ ભાગો સાથે ક્રિયા થાય છે અને પરિણામ એક જ હાજર પ્રતીક હોવું જોઈએ. જો બનેલી રચનાનું પ્રતીક ન હોય… અવ્યાખ્યાયિત.",labelExpr:"તમારી ક્રિયા લખો — ઓપરેટરો અવતરણ ચિહ્નમાં",btnCalc:"ગણતરી કરો",examples:"પ્રયાસ કરો:",catalogHeading:"પ્રતીક સૂચિ",createHeading:"પ્રતીક બનાવો",symbolPlaceholder:"પ્રતીક",btnAdd:"સૂચિમાં ઉમેરો",rulesHeading:"સિસ્ટમના નિયમો",noDefined:"અવ્યાખ્યાયિત",empty:"ખાલી",resultComposition:"પરિણામની રચના:"},
+    mr:{appName:"प्रतीकात्मक गणित",intro:"प्रत्येक प्रतीक भागांपासून बनते: +, -, x आणि /. या भागांसह क्रिया केली जाते आणि निकाल एकच अस्तित्वात असलेले प्रतीक असावा. तयार झालेल्या रचनेचे प्रतीक नसल्यास… अपरिभाषित.",labelExpr:"तुमची क्रिया लिहा — ऑपरेटर अवतरण चिन्हांत",btnCalc:"गणना करा",examples:"वापरून पहा:",catalogHeading:"प्रतीक सूची",createHeading:"प्रतीक तयार करा",symbolPlaceholder:"प्रतीक",btnAdd:"सूचीत जोडा",rulesHeading:"सिस्टमचे नियम",noDefined:"अपरिभाषित",empty:"रिकामे",resultComposition:"निकालाची रचना:"},
+    ta:{appName:"குறியீட்டு கணிதம்",intro:"ஒவ்வொரு குறியீடும் பகுதிகளால் ஆனது: +, -, x மற்றும் /. இந்தப் பகுதிகளுடன் செயல்பாடு செய்யப்படுகிறது, முடிவு ஒரு இருக்கும் குறியீடாக இருக்க வேண்டும். உருவான கலவைக்கு குறியீடு இல்லையெனில்… வரையறுக்கப்படாதது.",labelExpr:"உங்கள் செயல்பாட்டை எழுதுங்கள் — இயக்கிகள் மேற்கோள்களில்",btnCalc:"கணக்கிடு",examples:"முயற்சி செய்:",catalogHeading:"குறியீடுகள் பட்டியல்",createHeading:"குறியீடு உருவாக்கு",symbolPlaceholder:"குறியீடு",btnAdd:"பட்டியலில் சேர்",rulesHeading:"அமைப்பு விதிகள்",noDefined:"வரையறுக்கப்படாதது",empty:"காலி",resultComposition:"முடிவின் கலவை:"},
+    te:{appName:"చిహ్న గణితం",intro:"ప్రతి చిహ్నం భాగాలతో ఏర్పడుతుంది: +, -, x మరియు /. ఈ భాగాలతో క్రియ చేయబడుతుంది మరియు ఫలితం ఒకే ఉన్న చిహ్నం అయి ఉండాలి. ఏర్పడిన కూర్పుకు చిహ్నం లేకపోతే… నిర్వచించబడలేదు.",labelExpr:"మీ క్రియను రాయండి — ఆపరేటర్లు కోట్లలో",btnCalc:"లెక్కించు",examples:"ప్రయత్నించు:",catalogHeading:"చిహ్నాల జాబితా",createHeading:"చిహ్నం సృష్టించు",symbolPlaceholder:"చిహ్నం",btnAdd:"జాబితాలో చేర్చు",rulesHeading:"వ్యవస్థ నియమాలు",noDefined:"నిర్వచించబడలేదు",empty:"ఖాళీ",resultComposition:"ఫలితం కూర్పు:"},
+    kn:{appName:"ಸಾಂಕೇತಿಕ ಗಣಿತ",intro:"ಪ್ರತಿ ಸಂಕೇತವು ಭಾಗಗಳಿಂದ ಮಾಡಲ್ಪಟ್ಟಿದೆ: +, -, x ಮತ್ತು /. ಈ ಭಾಗಗಳಿಂದ ಕ್ರಿಯೆ ಮಾಡಲಾಗುತ್ತದೆ ಮತ್ತು ಫಲಿತಾಂಶವು ಒಂದೇ ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಸಂಕೇತವಾಗಿರಬೇಕು. ರೂಪುಗೊಂಡ ಸಂಯೋಜನೆಗೆ ಸಂಕೇತವಿಲ್ಲದಿದ್ದರೆ… ವ್ಯಾಖ್ಯಾನಿಸಲಾಗಿಲ್ಲ.",labelExpr:"ನಿಮ್ಮ ಕ್ರಿಯೆಯನ್ನು ಬರೆಯಿರಿ — ಆಪರೇಟರ್‌ಗಳು ಉದ್ಧರಣ ಚಿಹ್ನೆಗಳಲ್ಲಿ",btnCalc:"ಲೆಕ್ಕಹಾಕು",examples:"ಪ್ರಯತ್ನಿಸಿ:",catalogHeading:"ಸಂಕೇತಗಳ ಪಟ್ಟಿ",createHeading:"ಸಂಕೇತ ರಚಿಸಿ",symbolPlaceholder:"ಸಂಕೇತ",btnAdd:"ಪಟ್ಟಿಗೆ ಸೇರಿಸಿ",rulesHeading:"ವ್ಯವಸ್ಥೆಯ ನಿಯಮಗಳು",noDefined:"ವ್ಯಾಖ್ಯಾನಿಸಲಾಗಿಲ್ಲ",empty:"ಖಾಲಿ",resultComposition:"ಫಲಿತಾಂಶದ ಸಂಯೋಜನೆ:"},
+    ml:{appName:"പ്രതീക ഗണിതം",intro:"ഓരോ പ്രതീകവും ഭാഗങ്ങൾ കൊണ്ട് നിർമ്മിച്ചതാണ്: +, -, x, /. ഈ ഭാഗങ്ങളിൽ പ്രവർത്തനം നടത്തുന്നു, ഫലം ഒരു നിലവിലുള്ള പ്രതീകമായിരിക്കണം. ഉണ്ടാകുന്ന ഘടനയ്ക്ക് പ്രതീകമില്ലെങ്കിൽ… നിർവചിക്കപ്പെടാത്തത്.",labelExpr:"നിങ്ങളുടെ പ്രവർത്തനം എഴുതുക — ഓപ്പറേറ്ററുകൾ ഉദ്ധരണികളിൽ",btnCalc:"കണക്കാക്കുക",examples:"പരീക്ഷിക്കുക:",catalogHeading:"പ്രതീക പട്ടിക",createHeading:"പ്രതീകം സൃഷ്ടിക്കുക",symbolPlaceholder:"പ്രതീകം",btnAdd:"പട്ടികയിൽ ചേർക്കുക",rulesHeading:"സിസ്റ്റം നിയമങ്ങൾ",noDefined:"നിർവചിക്കപ്പെടാത്തത്",empty:"ശൂന്യം",resultComposition:"ഫലത്തിന്റെ ഘടന:"},
+    si:{appName:"සංකේත ගණිතය",intro:"සෑම සංකේතයක්ම කොටස් වලින් සෑදී ඇත: +, -, x සහ /. මෙම කොටස් සමඟ ක්‍රියා කරන අතර ප්‍රතිඵලය එක් පවතින සංකේතයක් විය යුතුය. සෑදෙන සංයුතියට සංකේතයක් නොමැති නම්… අර්ථ දක්වා නැත.",labelExpr:"ඔබේ ක්‍රියාව ලියන්න — ක්‍රියාකරුවන් උද්ධෘත ලකුණු තුළ",btnCalc:"ගණනය කරන්න",examples:"උත්සාහ කරන්න:",catalogHeading:"සංකේත ලැයිස්තුව",createHeading:"සංකේතයක් සාදන්න",symbolPlaceholder:"සංකේතය",btnAdd:"ලැයිස්තුවට එකතු කරන්න",rulesHeading:"පද්ධති නීති",noDefined:"අර්ථ දක්වා නැත",empty:"හිස්",resultComposition:"ප්‍රතිඵලයේ සංයුතිය:"},
+    th:{appName:"คณิตศาสตร์เชิงสัญลักษณ์",intro:"แต่ละสัญลักษณ์ประกอบด้วยส่วนต่าง ๆ: +, -, x และ /. เราใช้ส่วนเหล่านี้คำนวณ และผลลัพธ์ต้องเป็นสัญลักษณ์ที่มีอยู่เพียงหนึ่งเดียว หากองค์ประกอบที่ได้ไม่มีสัญลักษณ์… ไม่นิยาม",labelExpr:"เขียนการดำเนินการ — ตัวดำเนินการอยู่ในเครื่องหมายคำพูด",btnCalc:"คำนวณ",examples:"ลอง:",catalogHeading:"แคตตาล็อกสัญลักษณ์",createHeading:"สร้างสัญลักษณ์",symbolPlaceholder:"สัญลักษณ์",btnAdd:"เพิ่มในแคตตาล็อก",rulesHeading:"กฎของระบบ",noDefined:"ไม่นิยาม",empty:"ว่าง",resultComposition:"องค์ประกอบของผลลัพธ์:"},
+    vi:{appName:"Toán học tượng trưng",intro:"Mỗi biểu tượng được tạo từ các phần: +, -, x và /. Ta thực hiện phép toán trên các phần này và kết quả phải là một biểu tượng duy nhất đã tồn tại. Nếu thành phần tạo ra không có biểu tượng… Không xác định.",labelExpr:"Viết phép toán — toán tử nằm trong dấu ngoặc kép",btnCalc:"Tính",examples:"Thử:",catalogHeading:"Danh mục biểu tượng",createHeading:"Tạo biểu tượng",symbolPlaceholder:"Biểu tượng",btnAdd:"Thêm vào danh mục",rulesHeading:"Quy tắc hệ thống",noDefined:"Không xác định",empty:"trống",resultComposition:"Thành phần của kết quả:"},
+    id:{appName:"Matematika Simbolik",intro:"Setiap simbol terdiri dari bagian: +, -, x, dan /. Operasi dilakukan pada bagian-bagian itu dan hasilnya harus satu simbol yang sudah ada. Jika komposisi yang dihasilkan tidak punya simbol… Tidak terdefinisi.",labelExpr:"Tulis operasimu — operator di dalam tanda kutip",btnCalc:"Hitung",examples:"Coba:",catalogHeading:"Katalog simbol",createHeading:"Buat simbol",symbolPlaceholder:"Simbol",btnAdd:"Tambahkan ke katalog",rulesHeading:"Aturan sistem",noDefined:"Tidak terdefinisi",empty:"kosong",resultComposition:"Komposisi hasil:"},
+    ja:{appName:"記号数学",intro:"各記号は +、-、x、/ の部分からできています。その部分で計算し、結果は存在する単一の記号でなければなりません。できた構成に記号がなければ… 未定義です。",labelExpr:"演算を入力 — 演算子は引用符で囲む",btnCalc:"計算",examples:"試す:",catalogHeading:"記号カタログ",createHeading:"記号を作成",symbolPlaceholder:"記号",btnAdd:"カタログに追加",rulesHeading:"システムのルール",noDefined:"未定義",empty:"空",resultComposition:"結果の構成:"},
+    ko:{appName:"기호 수학",intro:"각 기호는 +, -, x, / 부분으로 이루어집니다. 이 부분으로 연산하며 결과는 존재하는 단일 기호여야 합니다. 만들어진 구성에 기호가 없으면… 정의되지 않음.",labelExpr:"연산을 입력하세요 — 연산자는 따옴표 안에",btnCalc:"계산",examples:"시도:",catalogHeading:"기호 목록",createHeading:"기호 만들기",symbolPlaceholder:"기호",btnAdd:"목록에 추가",rulesHeading:"시스템 규칙",noDefined:"정의되지 않음",empty:"비어 있음",resultComposition:"결과의 구성:"},
+    zh:{appName:"符号数学",intro:"每个符号由部分组成：+、-、x 和 /。用这些部分进行运算，结果必须是唯一已存在的符号。如果得到的组成没有对应符号……未定义。",labelExpr:"输入你的运算——运算符放在引号中",btnCalc:"计算",examples:"试试：",catalogHeading:"符号目录",createHeading:"创建符号",symbolPlaceholder:"符号",btnAdd:"添加到目录",rulesHeading:"系统规则",noDefined:"未定义",empty:"空",resultComposition:"结果的组成："}
+  };
+
+  /* =========================================================
+     MOTOR SIMBÓLICO
+     ========================================================= */
+  const KEYS = ['+','-','x','/'];
+  const CLS  = {'+':'plus','-':'minus','x':'times','/':'div'};
+
+  function vec(p,m,t,d){ return {'+':p,'-':m,'x':t,'/':d}; }
+  function keyOf(v){ return KEYS.map(k=>v[k]).join(','); }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  const DEFAULT_SYMBOLS = [
+    ['+',    1,0,0,0],
+    ['++',   2,0,0,0],
+    ['#',    4,0,0,0],
+    ['##',   8,0,0,0],
+    ['-',    0,1,0,0],
+    ['--',   0,2,0,0],
+    ['≡',    0,4,0,0],
+    ['x',    0,0,1,0],
+    ['xx',   0,0,2,0],
+    ['✖',    0,0,4,0],
+    ['/',    0,0,0,1],
+    ['//',   0,0,0,2],
+    ['÷',    0,0,0,4],
+    ['±',    1,1,0,0]
+  ];
+
+  const state = { symbols: [], bySym: new Map(), byVec: new Map() };
+  let currentLang = "es";
+
+  function buildIndex(){
+    state.bySym = new Map();
+    state.byVec = new Map();
+    for (const s of state.symbols){
+      state.bySym.set(s.sym, s.v);
+      const k = keyOf(s.v);
+      if (!state.byVec.has(k)) state.byVec.set(k, s.sym);
+    }
+  }
+
+  function initSymbols(){
+    state.symbols = DEFAULT_SYMBOLS.map(([sym,p,m,t,d]) => ({ sym, v: vec(p,m,t,d) }));
+    buildIndex();
+  }
+
+  function applyOp(a, b, op){
+    const r = {};
+    for (const k of KEYS){
+      const x = a[k], y = b[k];
+      let val;
+      switch(op){
+        case '+': val = x + y; break;
+        case '-': val = x - y; break;
+        case 'x': val = x * y; break;
+        case '/':
+          if (y === 0) return null;
+          if (x % y !== 0) return null;
+          val = x / y;
+          break;
+        default: return null;
+      }
+      if (val < 0) return null;
+      r[k] = val;
+    }
+    return r;
+  }
+
+  function tokenize(expr){
+    const out = [];
+    let i = 0;
+    while (i < expr.length){
+      const c = expr[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (c === '"'){
+        const j = expr.indexOf('"', i + 1);
+        if (j === -1) return { errorKey:'reasonQuote' };
+        out.push({ type:'op', value: expr.slice(i + 1, j) });
+        i = j + 1;
+      } else {
+        let j = i;
+        while (j < expr.length && !/\s/.test(expr[j]) && expr[j] !== '"') j++;
+        out.push({ type:'sym', value: expr.slice(i, j) });
+        i = j;
+      }
+    }
+    return { list: out };
+  }
+
+  function evaluar(expr){
+    const tk = tokenize(expr);
+    if (tk.errorKey) return { ok:false, reasonKey: tk.errorKey, tokens: [] };
+
+    const t = tk.list;
+    if (t.length === 0) return { ok:false, reasonKey:'reasonEmpty', tokens: [] };
+
+    for (let i = 0; i < t.length; i++){
+      const wantOp = (i % 2 === 1);
+      if (wantOp && t[i].type !== 'op')
+        return { ok:false, reasonKey:'reasonExpectedOp', vars:{pos:i+1}, tokens:t };
+      if (!wantOp && t[i].type !== 'sym')
+        return { ok:false, reasonKey:'reasonExpectedSym', vars:{pos:i+1}, tokens:t };
+    }
+    if (t.length % 2 === 0)
+      return { ok:false, reasonKey:'reasonEndsOp', tokens:t };
+
+    let cur = state.bySym.get(t[0].value);
+    if (!cur) return { ok:false, reasonKey:'reasonUnknownSym', vars:{sym:t[0].value}, tokens:t };
+    let curName = t[0].value;
+
+    for (let i = 1; i < t.length; i += 2){
+      const op = t[i].value;
+      const symTok = t[i + 1].value;
+
+      if (KEYS.indexOf(op) === -1)
+        return { ok:false, reasonKey:'reasonInvalidOp', vars:{op}, tokens:t };
+
+      const b = state.bySym.get(symTok);
+      if (!b) return { ok:false, reasonKey:'reasonUnknownSym', vars:{sym:symTok}, tokens:t };
+
+      const r = applyOp(cur, b, op);
+      if (!r)
+        return { ok:false, reasonKey:'reasonInvalidComposition', vars:{a:curName, op, b:symTok}, tokens:t };
+
+      const name = state.byVec.get(keyOf(r));
+      if (!name)
+        return { ok:false, reasonKey:'reasonNoSymbol', vars:{a:curName, op, b:symTok}, tokens:t };
+
+      cur = r;
+      curName = name;
+    }
+
+    return { ok:true, result: curName, vec: cur, tokens: t };
+  }
+
+  /* =========================================================
+     I18N
+     ========================================================= */
+  function t(key, vars){
+    const dict = I18N[currentLang] || {};
+    const base = I18N.en;
+    let s = dict[key];
+    if (s == null) s = base[key];
+    if (s == null) s = key;
+    return String(s).replace(/\{(\w+)\}/g, function(m, k){
+      return vars && vars[k] != null ? vars[k] : m;
+    });
+  }
+
+  function applyI18n(){
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      el.textContent = t(el.dataset.i18n);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      el.placeholder = t(el.dataset.i18nPlaceholder);
+    });
+
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = RTL.includes(currentLang) ? 'rtl' : 'ltr';
+
+    renderCatalogo();
+    mostrar();
+  }
+
+  /* =========================================================
+     RENDER
+     ========================================================= */
+  function compHTML(v){
+    const parts = KEYS.filter(k => v[k] > 0)
+      .map(k => '<span class="c-' + CLS[k] + '">' + v[k] + ' ' + escapeHtml(k) + '</span>');
+    return parts.length ? parts.join('') : '<span style="color:var(--muted)">' + escapeHtml(t('empty')) + '</span>';
+  }
+
+  function exprHTML(tokens){
+    return tokens.map(tk => tk.type === 'op'
+      ? '<span class="op">"' + escapeHtml(tk.value) + '"</span>'
+      : '<span class="sym">' + escapeHtml(tk.value) + '</span>'
+    ).join(' ');
+  }
+
+  function renderCatalogo(){
+    const el = document.getElementById('catalogo');
+    el.innerHTML = state.symbols.map(s =>
+      '<div class="card-sym">' +
+        '<div class="glyph">' + escapeHtml(s.sym) + '</div>' +
+        '<div class="comp">' + compHTML(s.v) + '</div>' +
+      '</div>'
+    ).join('');
+  }
+
+  function mostrar(){
+    const expr = document.getElementById('expr').value;
+    const res = evaluar(expr);
+    const box = document.getElementById('resultado');
+
+    const izquierda = (res.tokens && res.tokens.length)
+      ? exprHTML(res.tokens)
+      : '<span style="color:var(--muted)">—</span>';
+
+    const derecha = res.ok
+      ? '<span class="res-ok">' + escapeHtml(res.result) + '</span>'
+      : '<span class="res-no">' + escapeHtml(t('noDefined')) + '</span>';
+
+    const nota = res.ok
+      ? '<div class="nota">' + escapeHtml(t('resultComposition')) + ' <b>' + escapeHtml(res.result) + '</b> → ' + compHTML(res.vec) + '</div>'
+      : '<div class="nota no">' + escapeHtml(t(res.reasonKey, res.vars)) + '</div>';
+
+    box.innerHTML = '<div class="linea">' + izquierda + '<span class="eq">=</span>' + derecha + '</div>' + nota;
+  }
+
+  /* =========================================================
+     EVENTOS
+     ========================================================= */
+  function populateLangs(){
+    const sel = document.getElementById('lang');
+    LANGS.forEach(([code, name]) => {
+      const o = document.createElement('option');
+      o.value = code;
+      o.textContent = name;
+      sel.appendChild(o);
+    });
+
+    const saved = localStorage.getItem('msLang');
+    if (saved && I18N[saved]) currentLang = saved;
+    sel.value = currentLang;
+
+    sel.addEventListener('change', function(){
+      currentLang = sel.value;
+      localStorage.setItem('msLang', currentLang);
+      applyI18n();
+    });
+  }
+
+  document.getElementById('btnCalc').addEventListener('click', mostrar);
+  document.getElementById('expr').addEventListener('input', mostrar);
+  document.getElementById('expr').addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); mostrar(); }
+  });
+
+  document.querySelectorAll('.chip[data-ex]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.getElementById('expr').value = btn.getAttribute('data-ex');
+      mostrar();
+    });
+  });
+
+  document.getElementById('btnAdd').addEventListener('click', function(){
+    const msg = document.getElementById('msgNuevo');
+    const symEl = document.getElementById('nuevoSimbolo');
+    const sym = symEl.value.trim();
+
+    msg.className = '';
+
+    if (!/^[^\s"]{1,4}$/.test(sym)){
+      msg.className = 'err';
+      msg.textContent = t('msgInvalidSymbol');
+      return;
+    }
+    if (state.bySym.has(sym)){
+      msg.className = 'err';
+      msg.textContent = t('msgAlreadyExists', {sym});
+      return;
+    }
+
+    const p = Math.max(0, parseInt(document.getElementById('nPlus').value, 10) || 0);
+    const m = Math.max(0, parseInt(document.getElementById('nMinus').value, 10) || 0);
+    const tms = Math.max(0, parseInt(document.getElementById('nTimes').value, 10) || 0);
+    const d = Math.max(0, parseInt(document.getElementById('nDiv').value, 10) || 0);
+
+    if (p + m + tms + d === 0){
+      msg.className = 'err';
+      msg.textContent = t('msgNeedPart');
+      return;
+    }
+
+    const v = vec(p, m, tms, d);
+    const yaExiste = state.byVec.get(keyOf(v));
+
+    state.symbols.push({ sym: sym, v: v });
+    buildIndex();
+    renderCatalogo();
+    mostrar();
+
+    if (yaExiste){
+      msg.className = 'err';
+      msg.textContent = t('msgAddedDuplicate', {sym, existing: yaExiste});
+    } else {
+      msg.className = 'ok';
+      msg.textContent = t('msgAdded', {sym});
+    }
+    symEl.value = '';
+  });
+
+  /* =========================================================
+     ARRANQUE
+     ========================================================= */
+  initSymbols();
+  populateLangs();
+  applyI18n();
+})();
+</script>
+</body>
+</html>
