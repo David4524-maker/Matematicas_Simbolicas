@@ -156,13 +156,36 @@
     border-radius:12px;
     font-weight:800;
   }
-  .nota{font-size:14px;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:12px}
+  .nota{font-size:14px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line);padding-top:12px}
   .nota b{color:var(--text)}
   .nota.no{color:#f2a2a2}
 
+  /* composición visual */
+  .comp-visual{
+    display:inline-flex;
+    flex-wrap:wrap;
+    gap:4px;
+    vertical-align:middle;
+    margin-left:6px;
+  }
+  .comp-visual .piece{
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-weight:800;
+    font-size:16px;
+    line-height:1;
+    padding:3px 7px;
+    border-radius:6px;
+    min-width:20px;
+    text-align:center;
+  }
+  .comp-visual .p-plus  {background:rgba(74,222,128,.16);color:var(--plus)}
+  .comp-visual .p-minus {background:rgba(96,165,250,.16);color:var(--minus)}
+  .comp-visual .p-times {background:rgba(251,191,36,.16);color:var(--times)}
+  .comp-visual .p-div   {background:rgba(244,114,182,.16);color:var(--div)}
+
   .catalogo{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(104px,1fr));
+    grid-template-columns:repeat(auto-fill,minmax(112px,1fr));
     gap:10px;
   }
   .card-sym{
@@ -182,12 +205,21 @@
     margin-bottom:8px;
     word-break:break-all;
   }
-  .comp{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;font-size:11px;font-family:ui-monospace,Menlo,Consolas,monospace}
-  .comp span{padding:2px 6px;border-radius:6px;font-weight:700}
-  .c-plus{background:rgba(74,222,128,.14);color:var(--plus)}
-  .c-minus{background:rgba(96,165,250,.14);color:var(--minus)}
-  .c-times{background:rgba(251,191,36,.14);color:var(--times)}
-  .c-div{background:rgba(244,114,182,.14);color:var(--div)}
+  .comp{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+  .comp .piece{
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;
+    font-weight:800;
+    line-height:1;
+    padding:2px 5px;
+    border-radius:5px;
+    min-width:16px;
+    text-align:center;
+  }
+  .comp .p-plus  {background:rgba(74,222,128,.16);color:var(--plus)}
+  .comp .p-minus {background:rgba(96,165,250,.16);color:var(--minus)}
+  .comp .p-times {background:rgba(251,191,36,.16);color:var(--times)}
+  .comp .p-div   {background:rgba(244,114,182,.16);color:var(--div)}
 
   .grid{display:grid;grid-template-columns:1.55fr 1fr;gap:18px}
   @media (max-width:760px){.grid{grid-template-columns:1fr}}
@@ -234,7 +266,7 @@
     <div class="topbar">
       <div>
         <h1 id="appTitle" data-i18n="appName">Matemáticas Simbólicas</h1>
-        <p id="intro" data-i18n="intro">Cada símbolo está hecho de partes: +, -, x y /. Se opera con esas partes y el resultado debe ser un solo símbolo existente. Si la composición resultante no tiene símbolo… No definido.</p>
+        <p id="intro" data-i18n="intro">Cada símbolo está hecho de partes: +, -, x y /. Al restar se quitan partes del símbolo: ≡ (4 partes de -) − 1 parte = = (3 partes de -). Si la composición resultante no tiene símbolo… No definido.</p>
       </div>
       <label class="langBox">
         🌐
@@ -252,8 +284,10 @@
     <div class="ejemplos">
       <span data-i18n="examples">Prueba:</span>
       <button class="chip" data-ex='++ "+" ++'>++ "+" ++</button>
+      <button class="chip" data-ex='≡ "-" -'>≡ "-" -</button>
+      <button class="chip" data-ex='# "-" +'># "-" +</button>
       <button class="chip" data-ex='# "-" ++'># "-" ++</button>
-      <button class="chip" data-ex='++ "x" ++'>++ "x" ++</button>
+      <button class="chip" data-ex='✖ "-" x'>✖ "-" x</button>
       <button class="chip" data-ex='## "/" ++'>## "/" ++</button>
       <button class="chip" data-ex='+ "-" -'>+ "-" -</button>
       <button class="chip" data-ex='++ "+" #'>++ "+" #</button>
@@ -287,9 +321,9 @@
   <section class="panel">
     <h2 data-i18n="rulesHeading">Reglas del sistema</h2>
     <ul class="reglas">
-      <li data-i18n="rule1">Un símbolo es una composición de partes: # = 4 partes de +; ± = 1 de + y 1 de -.</li>
+      <li data-i18n="rule1">Un símbolo es una composición de partes: # = 4 partes de +; ≡ = 4 partes de -; = = 3 partes de -; ± = 1 de + y 1 de -.</li>
       <li data-i18n="rule2">Los operadores se escriben entre comillas dobles: "+", "-", "x", "/".</li>
-      <li data-i18n="rule3">Se opera parte por parte: la suma suma, el producto multiplica, la división divide (debe ser exacta).</li>
+      <li data-i18n="rule3">Se opera parte por parte: la suma añade partes, la resta quita partes, el producto multiplica, la división divide (debe ser exacta).</li>
       <li data-i18n="rule4">El resultado tiene que ser un único símbolo del catálogo. Si no existe → No definido.</li>
       <li data-i18n="rule5">Se evalúa de izquierda a derecha, y cada paso intermedio también debe dar un símbolo válido.</li>
     </ul>
@@ -322,7 +356,7 @@
   const I18N = {
     es:{
       appName:"Matemáticas Simbólicas",
-      intro:"Cada símbolo está hecho de partes: +, -, x y /. Se opera con esas partes y el resultado debe ser un solo símbolo existente. Si la composición resultante no tiene símbolo… No definido.",
+      intro:"Cada símbolo está hecho de partes: +, -, x y /. Al restar se quitan partes del símbolo: ≡ (4 partes de -) − 1 parte = = (3 partes de -). Si la composición resultante no tiene símbolo… No definido.",
       labelExpr:"Escribe tu operación — los operadores van entre comillas",
       btnCalc:"Calcular",
       examples:"Prueba:",
@@ -334,9 +368,9 @@
       noDefined:"No definido",
       empty:"vacío",
       resultComposition:"Composición del resultado:",
-      rule1:"Un símbolo es una composición de partes: # = 4 partes de +; ± = 1 de + y 1 de -.",
+      rule1:"Un símbolo es una composición de partes: # = 4 partes de +; ≡ = 4 partes de -; = = 3 partes de -; ± = 1 de + y 1 de -.",
       rule2:"Los operadores se escriben entre comillas dobles: \"+\", \"-\", \"x\", \"/\".",
-      rule3:"Se opera parte por parte: la suma suma, el producto multiplica, la división divide (debe ser exacta).",
+      rule3:"Se opera parte por parte: la suma añade partes, la resta quita partes, el producto multiplica, la división divide (debe ser exacta).",
       rule4:"El resultado tiene que ser un único símbolo del catálogo. Si no existe → No definido.",
       rule5:"Se evalúa de izquierda a derecha, y cada paso intermedio también debe dar un símbolo válido.",
       msgInvalidSymbol:"Símbolo inválido: 1 a 4 caracteres, sin espacios ni comillas.",
@@ -352,11 +386,12 @@
       reasonUnknownSym:"El símbolo «{sym}» no existe en el catálogo.",
       reasonInvalidOp:"«{op}» no es un operador válido. Usa \"+\", \"-\", \"x\" o \"/\".",
       reasonInvalidComposition:"La operación {a} \"{op}\" {b} no produce una composición válida.",
-      reasonNoSymbol:"La operación {a} \"{op}\" {b} da una composición que no corresponde a ningún símbolo."
+      reasonNoSymbol:"La operación {a} \"{op}\" {b} da una composición que no corresponde a ningún símbolo.",
+      deltaInfo:"{a} ({an} partes) \"{op}\" {b} ({bn} partes) → {rn} partes"
     },
     en:{
       appName:"Symbolic Mathematics",
-      intro:"Each symbol is made of parts: +, -, x and /. You operate with those parts and the result must be a single existing symbol. If the resulting composition has no symbol… Undefined.",
+      intro:"Each symbol is made of parts: +, -, x and /. Subtracting removes parts from a symbol: ≡ (4 parts of -) − 1 part = = (3 parts of -). If the resulting composition has no symbol… Undefined.",
       labelExpr:"Write your operation — operators go inside quotes",
       btnCalc:"Calculate",
       examples:"Try:",
@@ -368,9 +403,9 @@
       noDefined:"Undefined",
       empty:"empty",
       resultComposition:"Result composition:",
-      rule1:"A symbol is a composition of parts: # = 4 parts of +; ± = 1 of + and 1 of -.",
+      rule1:"A symbol is a composition of parts: # = 4 parts of +; ≡ = 4 parts of -; = = 3 parts of -; ± = 1 of + and 1 of -.",
       rule2:"Operators are written in double quotes: \"+\", \"-\", \"x\", \"/\".",
-      rule3:"Operations are done part by part: addition adds, multiplication multiplies, division divides (must be exact).",
+      rule3:"Operations are done part by part: addition adds parts, subtraction removes parts, multiplication multiplies, division divides (must be exact).",
       rule4:"The result must be a single symbol from the catalog. If it does not exist → Undefined.",
       rule5:"Evaluated left to right, and every intermediate step must also be a valid symbol.",
       msgInvalidSymbol:"Invalid symbol: 1 to 4 characters, no spaces or quotes.",
@@ -386,56 +421,57 @@
       reasonUnknownSym:"The symbol «{sym}» does not exist in the catalog.",
       reasonInvalidOp:"«{op}» is not a valid operator. Use \"+\", \"-\", \"x\" or \"/\".",
       reasonInvalidComposition:"The operation {a} \"{op}\" {b} does not produce a valid composition.",
-      reasonNoSymbol:"The operation {a} \"{op}\" {b} gives a composition that matches no symbol."
+      reasonNoSymbol:"The operation {a} \"{op}\" {b} gives a composition that matches no symbol.",
+      deltaInfo:"{a} ({an} parts) \"{op}\" {b} ({bn} parts) → {rn} parts"
     },
-    pt:{appName:"Matemática Simbólica",intro:"Cada símbolo é feito de partes: +, -, x e /. Opera-se com essas partes e o resultado deve ser um único símbolo existente. Se a composição resultante não tiver símbolo… Não definido.",labelExpr:"Escreve a tua operação — os operadores vão entre aspas",btnCalc:"Calcular",examples:"Experimenta:",catalogHeading:"Catálogo de símbolos",createHeading:"Criar símbolo",symbolPlaceholder:"Símbolo",btnAdd:"Adicionar ao catálogo",rulesHeading:"Regras do sistema",noDefined:"Não definido",empty:"vazio",resultComposition:"Composição do resultado:"},
-    fr:{appName:"Mathématiques Symboliques",intro:"Chaque symbole est composé de parties : +, -, x et /. On opère avec ces parties et le résultat doit être un seul symbole existant. Si la composition obtenue n’a pas de symbole… Non défini.",labelExpr:"Écris ton opération — les opérateurs vont entre guillemets",btnCalc:"Calculer",examples:"Essaie :",catalogHeading:"Catalogue de symboles",createHeading:"Créer un symbole",symbolPlaceholder:"Symbole",btnAdd:"Ajouter au catalogue",rulesHeading:"Règles du système",noDefined:"Non défini",empty:"vide",resultComposition:"Composition du résultat :"},
-    de:{appName:"Symbolische Mathematik",intro:"Jedes Symbol besteht aus Teilen: +, -, x und /. Mit diesen Teilen wird gerechnet, und das Ergebnis muss ein einzelnes vorhandenes Symbol sein. Gibt es für die Zusammensetzung kein Symbol … Nicht definiert.",labelExpr:"Schreibe deine Operation — Operatoren in Anführungszeichen",btnCalc:"Berechnen",examples:"Probiere:",catalogHeading:"Symbolkatalog",createHeading:"Symbol erstellen",symbolPlaceholder:"Symbol",btnAdd:"Zum Katalog hinzufügen",rulesHeading:"Systemregeln",noDefined:"Nicht definiert",empty:"leer",resultComposition:"Zusammensetzung des Ergebnisses:"},
-    it:{appName:"Matematica Simbolica",intro:"Ogni simbolo è formato da parti: +, -, x e /. Si opera con queste parti e il risultato deve essere un unico simbolo esistente. Se la composizione ottenuta non ha simbolo… Non definito.",labelExpr:"Scrivi la tua operazione — gli operatori vanno tra virgolette",btnCalc:"Calcola",examples:"Prova:",catalogHeading:"Catalogo dei simboli",createHeading:"Crea simbolo",symbolPlaceholder:"Simbolo",btnAdd:"Aggiungi al catalogo",rulesHeading:"Regole del sistema",noDefined:"Non definito",empty:"vuoto",resultComposition:"Composizione del risultato:"},
-    nl:{appName:"Symbolische Wiskunde",intro:"Elk symbool bestaat uit delen: +, -, x en /. Je rekent met die delen en het resultaat moet één bestaand symbool zijn. Als de samenstelling geen symbool heeft… Niet gedefinieerd.",labelExpr:"Schrijf je bewerking — operatoren tussen aanhalingstekens",btnCalc:"Berekenen",examples:"Probeer:",catalogHeading:"Symbolencatalogus",createHeading:"Symbool maken",symbolPlaceholder:"Symbool",btnAdd:"Toevoegen aan catalogus",rulesHeading:"Systeemregels",noDefined:"Niet gedefinieerd",empty:"leeg",resultComposition:"Samenstelling van het resultaat:"},
-    pl:{appName:"Matematyka Symboliczna",intro:"Każdy symbol składa się z części: +, -, x i /. Działania wykonuje się na tych częściach, a wynik musi być jednym istniejącym symbolem. Jeśli wynikowa kompozycja nie ma symbolu… Niezdefiniowane.",labelExpr:"Wpisz działanie — operatory w cudzysłowach",btnCalc:"Oblicz",examples:"Wypróbuj:",catalogHeading:"Katalog symboli",createHeading:"Utwórz symbol",symbolPlaceholder:"Symbol",btnAdd:"Dodaj do katalogu",rulesHeading:"Zasady systemu",noDefined:"Niezdefiniowane",empty:"puste",resultComposition:"Skład wyniku:"},
-    cs:{appName:"Symbolická matematika",intro:"Každý symbol se skládá z částí: +, -, x a /. Počítá se s těmito částmi a výsledek musí být jediný existující symbol. Pokud výsledná skladba nemá symbol… Nedefinováno.",labelExpr:"Napiš operaci — operátory v uvozovkách",btnCalc:"Vypočítat",examples:"Vyzkoušej:",catalogHeading:"Katalog symbolů",createHeading:"Vytvořit symbol",symbolPlaceholder:"Symbol",btnAdd:"Přidat do katalogu",rulesHeading:"Pravidla systému",noDefined:"Nedefinováno",empty:"prázdné",resultComposition:"Složení výsledku:"},
-    sk:{appName:"Symbolická matematika",intro:"Každý symbol sa skladá z častí: +, -, x a /. Počíta sa s týmito časťami a výsledok musí byť jediný existujúci symbol. Ak výsledná skladba nemá symbol… Nedefinované.",labelExpr:"Napíš operáciu — operátory v úvodzovkách",btnCalc:"Vypočítať",examples:"Vyskúšaj:",catalogHeading:"Katalóg symbolov",createHeading:"Vytvoriť symbol",symbolPlaceholder:"Symbol",btnAdd:"Pridať do katalógu",rulesHeading:"Pravidlá systému",noDefined:"Nedefinované",empty:"prázdne",resultComposition:"Zloženie výsledku:"},
-    hu:{appName:"Szimbolikus matematika",intro:"Minden szimbólum részekből áll: +, -, x és /. Ezekkel a részekkel végzünk műveleteket, és az eredménynek egyetlen létező szimbólumnak kell lennie. Ha a kapott összetételhez nincs szimbólum… Nem definiált.",labelExpr:"Írd be a műveletet — az operátorok idézőjelben",btnCalc:"Számítás",examples:"Próbáld:",catalogHeading:"Szimbólumkatalógus",createHeading:"Szimbólum létrehozása",symbolPlaceholder:"Szimbólum",btnAdd:"Hozzáadás a katalógushoz",rulesHeading:"Rendszerszabályok",noDefined:"Nem definiált",empty:"üres",resultComposition:"Az eredmény összetétele:"},
-    ro:{appName:"Matematică simbolică",intro:"Fiecare simbol este format din părți: +, -, x și /. Se operează cu aceste părți, iar rezultatul trebuie să fie un singur simbol existent. Dacă compoziția rezultată nu are simbol… Nedefinit.",labelExpr:"Scrie operația — operatorii între ghilimele",btnCalc:"Calculează",examples:"Încearcă:",catalogHeading:"Catalog de simboluri",createHeading:"Creează simbol",symbolPlaceholder:"Simbol",btnAdd:"Adaugă în catalog",rulesHeading:"Regulile sistemului",noDefined:"Nedefinit",empty:"gol",resultComposition:"Compoziția rezultatului:"},
-    bg:{appName:"Символна математика",intro:"Всеки символ се състои от части: +, -, x и /. Операциите се извършват с тези части и резултатът трябва да е един съществуващ символ. Ако получената композиция няма символ… Неопределено.",labelExpr:"Напиши операцията — операторите в кавички",btnCalc:"Изчисли",examples:"Опитай:",catalogHeading:"Каталог на символите",createHeading:"Създай символ",symbolPlaceholder:"Символ",btnAdd:"Добави в каталога",rulesHeading:"Правила на системата",noDefined:"Неопределено",empty:"празно",resultComposition:"Състав на резултата:"},
-    uk:{appName:"Символьна математика",intro:"Кожен символ складається з частин: +, -, x і /. Операції виконуються з цими частинами, а результат має бути єдиним наявним символом. Якщо отримана композиція не має символу… Не визначено.",labelExpr:"Введи операцію — оператори в лапках",btnCalc:"Обчислити",examples:"Спробуй:",catalogHeading:"Каталог символів",createHeading:"Створити символ",symbolPlaceholder:"Символ",btnAdd:"Додати до каталогу",rulesHeading:"Правила системи",noDefined:"Не визначено",empty:"порожньо",resultComposition:"Склад результату:"},
-    ru:{appName:"Символьная математика",intro:"Каждый символ состоит из частей: +, -, x и /. Операции выполняются с этими частями, а результат должен быть единственным существующим символом. Если полученная композиция не имеет символа… Не определено.",labelExpr:"Введи операцию — операторы в кавычках",btnCalc:"Вычислить",examples:"Попробуй:",catalogHeading:"Каталог символов",createHeading:"Создать символ",symbolPlaceholder:"Символ",btnAdd:"Добавить в каталог",rulesHeading:"Правила системы",noDefined:"Не определено",empty:"пусто",resultComposition:"Состав результата:"},
-    sr:{appName:"Симболичка математика",intro:"Сваки симбол се састоји од делова: +, -, x и /. Операције се изводе са тим деловима, а резултат мора бити један постојећи симбол. Ако добијена композиција нема симбол… Није дефинисано.",labelExpr:"Упиши операцију — оператори под наводницима",btnCalc:"Израчунај",examples:"Пробај:",catalogHeading:"Каталог симбола",createHeading:"Направи симбол",symbolPlaceholder:"Симбол",btnAdd:"Додај у каталог",rulesHeading:"Правила система",noDefined:"Није дефинисано",empty:"празно",resultComposition:"Састав резултата:"},
-    hr:{appName:"Simbolička matematika",intro:"Svaki se simbol sastoji od dijelova: +, -, x i /. Operacije se izvode s tim dijelovima, a rezultat mora biti jedan postojeći simbol. Ako dobiveni sastav nema simbol… Nedefinirano.",labelExpr:"Upiši operaciju — operatori pod navodnicima",btnCalc:"Izračunaj",examples:"Pokušaj:",catalogHeading:"Katalog simbola",createHeading:"Stvori simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj u katalog",rulesHeading:"Pravila sustava",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sastav rezultata:"},
-    sl:{appName:"Simbolična matematika",intro:"Vsak simbol je sestavljen iz delov: +, -, x in /. Operacije se izvajajo s temi deli, rezultat pa mora biti en obstoječi simbol. Če dobljena sestava nima simbola… Nedefinirano.",labelExpr:"Vpiši operacijo — operatorji v narekovajih",btnCalc:"Izračunaj",examples:"Poskusi:",catalogHeading:"Katalog simbolov",createHeading:"Ustvari simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj v katalog",rulesHeading:"Pravila sistema",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sestava rezultata:"},
-    bs:{appName:"Simbolička matematika",intro:"Svaki simbol se sastoji od dijelova: +, -, x i /. Operacije se izvode s tim dijelovima, a rezultat mora biti jedan postojeći simbol. Ako dobijeni sastav nema simbol… Nedefinirano.",labelExpr:"Upiši operaciju — operatori pod navodnicima",btnCalc:"Izračunaj",examples:"Pokušaj:",catalogHeading:"Katalog simbola",createHeading:"Napravi simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj u katalog",rulesHeading:"Pravila sistema",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sastav rezultata:"},
-    mk:{appName:"Симболична математика",intro:"Секој симбол се состои од делови: +, -, x и /. Операциите се изведуваат со тие делови, а резултатот мора да биде еден постоечки симбол. Ако добиената композиција нема симбол… Недефинирано.",labelExpr:"Внеси операција — операторите во наводници",btnCalc:"Пресметај",examples:"Пробај:",catalogHeading:"Каталог на симболи",createHeading:"Создај симбол",symbolPlaceholder:"Симбол",btnAdd:"Додај во каталогот",rulesHeading:"Правила на системот",noDefined:"Недефинирано",empty:"празно",resultComposition:"Состав на резултатот:"},
-    sq:{appName:"Matematikë simbolike",intro:"Çdo simbol përbëhet nga pjesë: +, -, x dhe /. Veprohet me këto pjesë dhe rezultati duhet të jetë një simbol i vetëm ekzistues. Nëse përbërja e marrë nuk ka simbol… E padefinuar.",labelExpr:"Shkruaj veprimin — operatorët mes thonjëzave",btnCalc:"Llogarit",examples:"Provo:",catalogHeading:"Katalogu i simboleve",createHeading:"Krijo simbol",symbolPlaceholder:"Simbol",btnAdd:"Shto në katalog",rulesHeading:"Rregullat e sistemit",noDefined:"E padefinuar",empty:"bosh",resultComposition:"Përbërja e rezultatit:"},
-    el:{appName:"Συμβολικά Μαθηματικά",intro:"Κάθε σύμβολο αποτελείται από μέρη: +, -, x και /. Οι πράξεις γίνονται με αυτά τα μέρη και το αποτέλεσμα πρέπει να είναι ένα υπάρχον σύμβολο. Αν η σύνθεση δεν έχει σύμβολο… Μη ορισμένο.",labelExpr:"Γράψε την πράξη — οι τελεστές σε εισαγωγικά",btnCalc:"Υπολογισμός",examples:"Δοκίμασε:",catalogHeading:"Κατάλογος συμβόλων",createHeading:"Δημιουργία συμβόλου",symbolPlaceholder:"Σύμβολο",btnAdd:"Προσθήκη στον κατάλογο",rulesHeading:"Κανόνες συστήματος",noDefined:"Μη ορισμένο",empty:"κενό",resultComposition:"Σύνθεση αποτελέσματος:"},
-    tr:{appName:"Sembolik Matematik",intro:"Her sembol parçalardan oluşur: +, -, x ve /. Bu parçalarla işlem yapılır ve sonuç tek bir mevcut sembol olmalıdır. Oluşan bileşimin sembolü yoksa… Tanımsız.",labelExpr:"İşlemini yaz — operatörler tırnak içinde",btnCalc:"Hesapla",examples:"Dene:",catalogHeading:"Sembol kataloğu",createHeading:"Sembol oluştur",symbolPlaceholder:"Sembol",btnAdd:"Kataloğa ekle",rulesHeading:"Sistem kuralları",noDefined:"Tanımsız",empty:"boş",resultComposition:"Sonucun bileşimi:"},
-    az:{appName:"Simvolik Riyaziyyat",intro:"Hər simvol hissələrdən ibarətdir: +, -, x və /. Bu hissələrlə əməliyyat aparılır və nəticə mövcud olan tək simvol olmalıdır. Alınan birləşmənin simvolu yoxdursa… Təyin olunmayıb.",labelExpr:"Əməliyyatı yaz — operatorlar dırnaq içində",btnCalc:"Hesabla",examples:"Yoxla:",catalogHeading:"Simvollar kataloqu",createHeading:"Simvol yarat",symbolPlaceholder:"Simvol",btnAdd:"Kataloqa əlavə et",rulesHeading:"Sistem qaydaları",noDefined:"Təyin olunmayıb",empty:"boş",resultComposition:"Nəticənin tərkibi:"},
-    kk:{appName:"Символдық математика",intro:"Әр символ бөліктерден тұрады: +, -, x және /. Осы бөліктермен амалдар орындалады, нәтиже бір ғана бар символ болуы керек. Алынған құрамда символ болмаса… Анықталмаған.",labelExpr:"Амалды жаз — операторлар тырнақшада",btnCalc:"Есептеу",examples:"Байқап көр:",catalogHeading:"Символдар каталогы",createHeading:"Символ жасау",symbolPlaceholder:"Символ",btnAdd:"Каталогқа қосу",rulesHeading:"Жүйе ережелері",noDefined:"Анықталмаған",empty:"бос",resultComposition:"Нәтиженің құрамы:"},
-    uz:{appName:"Simvolik matematika",intro:"Har bir simvol qismlardan iborat: +, -, x va /. Shu qismlar bilan amal bajariladi va natija bitta mavjud simvol bo‘lishi kerak. Hosil bo‘lgan tarkibda simvol bo‘lmasa… Aniqlanmagan.",labelExpr:"Amalni yoz — operatorlar qo‘shtirnoq ichida",btnCalc:"Hisoblash",examples:"Sinab ko‘r:",catalogHeading:"Simvollar katalogi",createHeading:"Simvol yaratish",symbolPlaceholder:"Simvol",btnAdd:"Katalogga qo‘shish",rulesHeading:"Tizim qoidalari",noDefined:"Aniqlanmagan",empty:"bo‘sh",resultComposition:"Natija tarkibi:"},
-    ky:{appName:"Символдук математика",intro:"Ар бир символ бөлүктөрдөн турат: +, -, x жана /. Бул бөлүктөр менен амалдар аткарылат, натыйжа бир гана бар символ болушу керек. Алынган курамда символ жок болсо… Аныкталган эмес.",labelExpr:"Амалды жаз — операторлор тырмакчада",btnCalc:"Эсептөө",examples:"Сынап көр:",catalogHeading:"Символдор каталогу",createHeading:"Символ жасоо",symbolPlaceholder:"Символ",btnAdd:"Каталогго кошуу",rulesHeading:"Система эрежелери",noDefined:"Аныкталган эмес",empty:"бош",resultComposition:"Натыйжанын курамы:"},
-    tt:{appName:"Символлык математика",intro:"Һәр символ өлешләрдән тора: +, -, x һәм /. Бу өлешләр белән гамәлләр башкарыла, нәтиҗә бер генә булган символ булырга тиеш. Алынган составта символ булмаса… Билгеләнмәгән.",labelExpr:"Гамәлне яз — операторлар тырнак эчендә",btnCalc:"Исәпләү",examples:"Сынап кара:",catalogHeading:"Символлар каталогы",createHeading:"Символ ясау",symbolPlaceholder:"Символ",btnAdd:"Каталогка өстәү",rulesHeading:"Система кагыйдәләре",noDefined:"Билгеләнмәгән",empty:"буш",resultComposition:"Нәтиҗә составы:"},
-    hy:{appName:"Սիմվոլային մաթեմատիկա",intro:"Յուրաքանչյուր սիմվոլ կազմված է մասերից՝ +, -, x և /. Գործողությունները կատարվում են այդ մասերով, իսկ արդյունքը պետք է լինի մեկ գոյություն ունեցող սիմվոլ։ Եթե ստացված կազմը սիմվոլ չունի… Չսահմանված։",labelExpr:"Գրիր գործողությունը — օպերատորները չակերտների մեջ",btnCalc:"Հաշվել",examples:"Փորձիր՝",catalogHeading:"Սիմվոլների կատալոգ",createHeading:"Ստեղծել սիմվոլ",symbolPlaceholder:"Սիմվոլ",btnAdd:"Ավելացնել կատալոգ",rulesHeading:"Համակարգի կանոններ",noDefined:"Չսահմանված",empty:"դատարկ",resultComposition:"Արդյունքի կազմը՝"},
-    ka:{appName:"სიმბოლური მათემატიკა",intro:"თითოეული სიმბოლო შედგება ნაწილებისგან: +, -, x და /. ოპერაციები ამ ნაწილებით სრულდება და შედეგი უნდა იყოს ერთი არსებული სიმბოლო. თუ მიღებულ შემადგენლობას სიმბოლო არ აქვს… განუსაზღვრელი.",labelExpr:"ჩაწერე ოპერაცია — ოპერატორები ბრჭყალებში",btnCalc:"გამოთვლა",examples:"სცადე:",catalogHeading:"სიმბოლოების კატალოგი",createHeading:"სიმბოლოს შექმნა",symbolPlaceholder:"სიმბოლო",btnAdd:"კატალოგში დამატება",rulesHeading:"სისტემის წესები",noDefined:"განუსაზღვრელი",empty:"ცარიელი",resultComposition:"შედეგის შემადგენლობა:"},
-    he:{appName:"מתמטיקה סמלית",intro:"כל סמל מורכב מחלקים: +, -, x ו־/. פועלים עם החלקים האלה והתוצאה חייבת להיות סמל קיים אחד. אם להרכב המתקבל אין סמל… לא מוגדר.",labelExpr:"כתוב את הפעולה — האופרטורים במרכאות",btnCalc:"חשב",examples:"נסה:",catalogHeading:"קטלוג סמלים",createHeading:"יצירת סמל",symbolPlaceholder:"סמל",btnAdd:"הוסף לקטלוג",rulesHeading:"כללי המערכת",noDefined:"לא מוגדר",empty:"ריק",resultComposition:"הרכב התוצאה:"},
-    ar:{appName:"الرياضيات الرمزية",intro:"كل رمز يتكون من أجزاء: + و - و x و /. تُجرى العمليات على هذه الأجزاء، ويجب أن تكون النتيجة رمزًا واحدًا موجودًا. إذا لم يكن للتركيب الناتج رمز… غير معرّف.",labelExpr:"اكتب عمليتك — توضع المعاملات بين علامتي اقتباس",btnCalc:"احسب",examples:"جرّب:",catalogHeading:"فهرس الرموز",createHeading:"إنشاء رمز",symbolPlaceholder:"رمز",btnAdd:"أضف إلى الفهرس",rulesHeading:"قواعد النظام",noDefined:"غير معرّف",empty:"فارغ",resultComposition:"تركيب النتيجة:"},
-    fa:{appName:"ریاضیات نمادی",intro:"هر نماد از بخش‌ها ساخته می‌شود: +، -، x و /. با این بخش‌ها عمل می‌کنیم و نتیجه باید یک نماد موجود باشد. اگر ترکیب به‌دست‌آمده نماد نداشته باشد… تعریف‌نشده.",labelExpr:"عملیات را بنویس — عملگرها داخل گیومه",btnCalc:"محاسبه",examples:"امتحان کن:",catalogHeading:"فهرست نمادها",createHeading:"ساخت نماد",symbolPlaceholder:"نماد",btnAdd:"افزودن به فهرست",rulesHeading:"قواعد سیستم",noDefined:"تعریف‌نشده",empty:"خالی",resultComposition:"ترکیب نتیجه:"},
-    ur:{appName:"علامتی ریاضیات",intro:"ہر علامت حصوں سے بنتی ہے: +، -، x اور /. ان حصوں سے عمل کیا جاتا ہے اور نتیجہ ایک موجود علامت ہونا چاہیے۔ اگر بننے والی ترکیب کی علامت نہ ہو… غیر متعین۔",labelExpr:"اپنا عمل لکھیں — آپریٹرز اقتباس میں",btnCalc:"حساب کریں",examples:"آزمائیں:",catalogHeading:"علامتوں کی فہرست",createHeading:"علامت بنائیں",symbolPlaceholder:"علامت",btnAdd:"فہرست میں شامل کریں",rulesHeading:"نظام کے قواعد",noDefined:"غیر متعین",empty:"خالی",resultComposition:"نتیجے کی ترکیب:"},
-    hi:{appName:"प्रतीकात्मक गणित",intro:"हर प्रतीक भागों से बनता है: +, -, x और /. इन भागों से क्रिया की जाती है और परिणाम एक ही मौजूद प्रतीक होना चाहिए। अगर बनी संरचना का प्रतीक न हो… अपरिभाषित।",labelExpr:"अपनी क्रिया लिखें — ऑपरेटर उद्धरण चिह्नों में",btnCalc:"गणना करें",examples:"आज़माएँ:",catalogHeading:"प्रतीक सूची",createHeading:"प्रतीक बनाएँ",symbolPlaceholder:"प्रतीक",btnAdd:"सूची में जोड़ें",rulesHeading:"सिस्टम के नियम",noDefined:"अपरिभाषित",empty:"खाली",resultComposition:"परिणाम की संरचना:"},
-    bn:{appName:"প্রতীকী গণিত",intro:"প্রতিটি প্রতীক অংশ দিয়ে তৈরি: +, -, x এবং /. এই অংশগুলো দিয়ে কাজ করা হয় এবং ফলাফল অবশ্যই একটি বিদ্যমান প্রতীক হতে হবে। যদি তৈরি 구성ে প্রতীক না থাকে… অনির্ধারিত।",labelExpr:"তোমার কাজ লেখো — অপারেটরগুলো উদ্ধৃতি চিহ্নে",btnCalc:"গণনা করো",examples:"চেষ্টা করো:",catalogHeading:"প্রতীক তালিকা",createHeading:"প্রতীক তৈরি করো",symbolPlaceholder:"প্রতীক",btnAdd:"তালিকায় যোগ করো",rulesHeading:"সিস্টেমের নিয়ম",noDefined:"অনির্ধারিত",empty:"খালি",resultComposition:"ফলাফলের 구성:"},
-    pa:{appName:"ਪ੍ਰਤੀਕਾਤਮਕ ਗਣਿਤ",intro:"ਹਰ ਪ੍ਰਤੀਕ ਹਿੱਸਿਆਂ ਨਾਲ ਬਣਦਾ ਹੈ: +, -, x ਅਤੇ /. ਇਨ੍ਹਾਂ ਹਿੱਸਿਆਂ ਨਾਲ ਕੰਮ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਅਤੇ ਨਤੀਜਾ ਇੱਕ ਮੌਜੂਦ ਪ੍ਰਤੀਕ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ। ਜੇ ਬਣੀ ਬਣਤਰ ਦਾ ਪ੍ਰਤੀਕ ਨਾ ਹੋਵੇ… ਅਣ-ਪਰਿਭਾਸ਼ਿਤ।",labelExpr:"ਆਪਣੀ ਕਿਰਿਆ ਲਿਖੋ — ਆਪਰੇਟਰ ਉਧਰਣ ਚਿੰਨ੍ਹਾਂ ਵਿੱਚ",btnCalc:"ਗਿਣੋ",examples:"ਆਜ਼ਮਾਓ:",catalogHeading:"ਪ੍ਰਤੀਕ ਸੂਚੀ",createHeading:"ਪ੍ਰਤੀਕ ਬਣਾਓ",symbolPlaceholder:"ਪ੍ਰਤੀਕ",btnAdd:"ਸੂਚੀ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ",rulesHeading:"ਸਿਸਟਮ ਦੇ ਨਿਯਮ",noDefined:"ਅਣ-ਪਰਿਭਾਸ਼ਿਤ",empty:"ਖਾਲੀ",resultComposition:"ਨਤੀਜੇ ਦੀ ਬਣਤਰ:"},
-    gu:{appName:"પ્રતીકાત્મક ગણિત",intro:"દરેક પ્રતીક ભાગોથી બને છે: +, -, x અને /. આ ભાગો સાથે ક્રિયા થાય છે અને પરિણામ એક જ હાજર પ્રતીક હોવું જોઈએ. જો બનેલી રચનાનું પ્રતીક ન હોય… અવ્યાખ્યાયિત.",labelExpr:"તમારી ક્રિયા લખો — ઓપરેટરો અવતરણ ચિહ્નમાં",btnCalc:"ગણતરી કરો",examples:"પ્રયાસ કરો:",catalogHeading:"પ્રતીક સૂચિ",createHeading:"પ્રતીક બનાવો",symbolPlaceholder:"પ્રતીક",btnAdd:"સૂચિમાં ઉમેરો",rulesHeading:"સિસ્ટમના નિયમો",noDefined:"અવ્યાખ્યાયિત",empty:"ખાલી",resultComposition:"પરિણામની રચના:"},
-    mr:{appName:"प्रतीकात्मक गणित",intro:"प्रत्येक प्रतीक भागांपासून बनते: +, -, x आणि /. या भागांसह क्रिया केली जाते आणि निकाल एकच अस्तित्वात असलेले प्रतीक असावा. तयार झालेल्या रचनेचे प्रतीक नसल्यास… अपरिभाषित.",labelExpr:"तुमची क्रिया लिहा — ऑपरेटर अवतरण चिन्हांत",btnCalc:"गणना करा",examples:"वापरून पहा:",catalogHeading:"प्रतीक सूची",createHeading:"प्रतीक तयार करा",symbolPlaceholder:"प्रतीक",btnAdd:"सूचीत जोडा",rulesHeading:"सिस्टमचे नियम",noDefined:"अपरिभाषित",empty:"रिकामे",resultComposition:"निकालाची रचना:"},
-    ta:{appName:"குறியீட்டு கணிதம்",intro:"ஒவ்வொரு குறியீடும் பகுதிகளால் ஆனது: +, -, x மற்றும் /. இந்தப் பகுதிகளுடன் செயல்பாடு செய்யப்படுகிறது, முடிவு ஒரு இருக்கும் குறியீடாக இருக்க வேண்டும். உருவான கலவைக்கு குறியீடு இல்லையெனில்… வரையறுக்கப்படாதது.",labelExpr:"உங்கள் செயல்பாட்டை எழுதுங்கள் — இயக்கிகள் மேற்கோள்களில்",btnCalc:"கணக்கிடு",examples:"முயற்சி செய்:",catalogHeading:"குறியீடுகள் பட்டியல்",createHeading:"குறியீடு உருவாக்கு",symbolPlaceholder:"குறியீடு",btnAdd:"பட்டியலில் சேர்",rulesHeading:"அமைப்பு விதிகள்",noDefined:"வரையறுக்கப்படாதது",empty:"காலி",resultComposition:"முடிவின் கலவை:"},
-    te:{appName:"చిహ్న గణితం",intro:"ప్రతి చిహ్నం భాగాలతో ఏర్పడుతుంది: +, -, x మరియు /. ఈ భాగాలతో క్రియ చేయబడుతుంది మరియు ఫలితం ఒకే ఉన్న చిహ్నం అయి ఉండాలి. ఏర్పడిన కూర్పుకు చిహ్నం లేకపోతే… నిర్వచించబడలేదు.",labelExpr:"మీ క్రియను రాయండి — ఆపరేటర్లు కోట్లలో",btnCalc:"లెక్కించు",examples:"ప్రయత్నించు:",catalogHeading:"చిహ్నాల జాబితా",createHeading:"చిహ్నం సృష్టించు",symbolPlaceholder:"చిహ్నం",btnAdd:"జాబితాలో చేర్చు",rulesHeading:"వ్యవస్థ నియమాలు",noDefined:"నిర్వచించబడలేదు",empty:"ఖాళీ",resultComposition:"ఫలితం కూర్పు:"},
-    kn:{appName:"ಸಾಂಕೇತಿಕ ಗಣಿತ",intro:"ಪ್ರತಿ ಸಂಕೇತವು ಭಾಗಗಳಿಂದ ಮಾಡಲ್ಪಟ್ಟಿದೆ: +, -, x ಮತ್ತು /. ಈ ಭಾಗಗಳಿಂದ ಕ್ರಿಯೆ ಮಾಡಲಾಗುತ್ತದೆ ಮತ್ತು ಫಲಿತಾಂಶವು ಒಂದೇ ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಸಂಕೇತವಾಗಿರಬೇಕು. ರೂಪುಗೊಂಡ ಸಂಯೋಜನೆಗೆ ಸಂಕೇತವಿಲ್ಲದಿದ್ದರೆ… ವ್ಯಾಖ್ಯಾನಿಸಲಾಗಿಲ್ಲ.",labelExpr:"ನಿಮ್ಮ ಕ್ರಿಯೆಯನ್ನು ಬರೆಯಿರಿ — ಆಪರೇಟರ್‌ಗಳು ಉದ್ಧರಣ ಚಿಹ್ನೆಗಳಲ್ಲಿ",btnCalc:"ಲೆಕ್ಕಹಾಕು",examples:"ಪ್ರಯತ್ನಿಸಿ:",catalogHeading:"ಸಂಕೇತಗಳ ಪಟ್ಟಿ",createHeading:"ಸಂಕೇತ ರಚಿಸಿ",symbolPlaceholder:"ಸಂಕೇತ",btnAdd:"ಪಟ್ಟಿಗೆ ಸೇರಿಸಿ",rulesHeading:"ವ್ಯವಸ್ಥೆಯ ನಿಯಮಗಳು",noDefined:"ವ್ಯಾಖ್ಯಾನಿಸಲಾಗಿಲ್ಲ",empty:"ಖಾಲಿ",resultComposition:"ಫಲಿತಾಂಶದ ಸಂಯೋಜನೆ:"},
-    ml:{appName:"പ്രതീക ഗണിതം",intro:"ഓരോ പ്രതീകവും ഭാഗങ്ങൾ കൊണ്ട് നിർമ്മിച്ചതാണ്: +, -, x, /. ഈ ഭാഗങ്ങളിൽ പ്രവർത്തനം നടത്തുന്നു, ഫലം ഒരു നിലവിലുള്ള പ്രതീകമായിരിക്കണം. ഉണ്ടാകുന്ന ഘടനയ്ക്ക് പ്രതീകമില്ലെങ്കിൽ… നിർവചിക്കപ്പെടാത്തത്.",labelExpr:"നിങ്ങളുടെ പ്രവർത്തനം എഴുതുക — ഓപ്പറേറ്ററുകൾ ഉദ്ധരണികളിൽ",btnCalc:"കണക്കാക്കുക",examples:"പരീക്ഷിക്കുക:",catalogHeading:"പ്രതീക പട്ടിക",createHeading:"പ്രതീകം സൃഷ്ടിക്കുക",symbolPlaceholder:"പ്രതീകം",btnAdd:"പട്ടികയിൽ ചേർക്കുക",rulesHeading:"സിസ്റ്റം നിയമങ്ങൾ",noDefined:"നിർവചിക്കപ്പെടാത്തത്",empty:"ശൂന്യം",resultComposition:"ഫലത്തിന്റെ ഘടന:"},
-    si:{appName:"සංකේත ගණිතය",intro:"සෑම සංකේතයක්ම කොටස් වලින් සෑදී ඇත: +, -, x සහ /. මෙම කොටස් සමඟ ක්‍රියා කරන අතර ප්‍රතිඵලය එක් පවතින සංකේතයක් විය යුතුය. සෑදෙන සංයුතියට සංකේතයක් නොමැති නම්… අර්ථ දක්වා නැත.",labelExpr:"ඔබේ ක්‍රියාව ලියන්න — ක්‍රියාකරුවන් උද්ධෘත ලකුණු තුළ",btnCalc:"ගණනය කරන්න",examples:"උත්සාහ කරන්න:",catalogHeading:"සංකේත ලැයිස්තුව",createHeading:"සංකේතයක් සාදන්න",symbolPlaceholder:"සංකේතය",btnAdd:"ලැයිස්තුවට එකතු කරන්න",rulesHeading:"පද්ධති නීති",noDefined:"අර්ථ දක්වා නැත",empty:"හිස්",resultComposition:"ප්‍රතිඵලයේ සංයුතිය:"},
-    th:{appName:"คณิตศาสตร์เชิงสัญลักษณ์",intro:"แต่ละสัญลักษณ์ประกอบด้วยส่วนต่าง ๆ: +, -, x และ /. เราใช้ส่วนเหล่านี้คำนวณ และผลลัพธ์ต้องเป็นสัญลักษณ์ที่มีอยู่เพียงหนึ่งเดียว หากองค์ประกอบที่ได้ไม่มีสัญลักษณ์… ไม่นิยาม",labelExpr:"เขียนการดำเนินการ — ตัวดำเนินการอยู่ในเครื่องหมายคำพูด",btnCalc:"คำนวณ",examples:"ลอง:",catalogHeading:"แคตตาล็อกสัญลักษณ์",createHeading:"สร้างสัญลักษณ์",symbolPlaceholder:"สัญลักษณ์",btnAdd:"เพิ่มในแคตตาล็อก",rulesHeading:"กฎของระบบ",noDefined:"ไม่นิยาม",empty:"ว่าง",resultComposition:"องค์ประกอบของผลลัพธ์:"},
-    vi:{appName:"Toán học tượng trưng",intro:"Mỗi biểu tượng được tạo từ các phần: +, -, x và /. Ta thực hiện phép toán trên các phần này và kết quả phải là một biểu tượng duy nhất đã tồn tại. Nếu thành phần tạo ra không có biểu tượng… Không xác định.",labelExpr:"Viết phép toán — toán tử nằm trong dấu ngoặc kép",btnCalc:"Tính",examples:"Thử:",catalogHeading:"Danh mục biểu tượng",createHeading:"Tạo biểu tượng",symbolPlaceholder:"Biểu tượng",btnAdd:"Thêm vào danh mục",rulesHeading:"Quy tắc hệ thống",noDefined:"Không xác định",empty:"trống",resultComposition:"Thành phần của kết quả:"},
-    id:{appName:"Matematika Simbolik",intro:"Setiap simbol terdiri dari bagian: +, -, x, dan /. Operasi dilakukan pada bagian-bagian itu dan hasilnya harus satu simbol yang sudah ada. Jika komposisi yang dihasilkan tidak punya simbol… Tidak terdefinisi.",labelExpr:"Tulis operasimu — operator di dalam tanda kutip",btnCalc:"Hitung",examples:"Coba:",catalogHeading:"Katalog simbol",createHeading:"Buat simbol",symbolPlaceholder:"Simbol",btnAdd:"Tambahkan ke katalog",rulesHeading:"Aturan sistem",noDefined:"Tidak terdefinisi",empty:"kosong",resultComposition:"Komposisi hasil:"},
-    ja:{appName:"記号数学",intro:"各記号は +、-、x、/ の部分からできています。その部分で計算し、結果は存在する単一の記号でなければなりません。できた構成に記号がなければ… 未定義です。",labelExpr:"演算を入力 — 演算子は引用符で囲む",btnCalc:"計算",examples:"試す:",catalogHeading:"記号カタログ",createHeading:"記号を作成",symbolPlaceholder:"記号",btnAdd:"カタログに追加",rulesHeading:"システムのルール",noDefined:"未定義",empty:"空",resultComposition:"結果の構成:"},
-    ko:{appName:"기호 수학",intro:"각 기호는 +, -, x, / 부분으로 이루어집니다. 이 부분으로 연산하며 결과는 존재하는 단일 기호여야 합니다. 만들어진 구성에 기호가 없으면… 정의되지 않음.",labelExpr:"연산을 입력하세요 — 연산자는 따옴표 안에",btnCalc:"계산",examples:"시도:",catalogHeading:"기호 목록",createHeading:"기호 만들기",symbolPlaceholder:"기호",btnAdd:"목록에 추가",rulesHeading:"시스템 규칙",noDefined:"정의되지 않음",empty:"비어 있음",resultComposition:"결과의 구성:"},
-    zh:{appName:"符号数学",intro:"每个符号由部分组成：+、-、x 和 /。用这些部分进行运算，结果必须是唯一已存在的符号。如果得到的组成没有对应符号……未定义。",labelExpr:"输入你的运算——运算符放在引号中",btnCalc:"计算",examples:"试试：",catalogHeading:"符号目录",createHeading:"创建符号",symbolPlaceholder:"符号",btnAdd:"添加到目录",rulesHeading:"系统规则",noDefined:"未定义",empty:"空",resultComposition:"结果的组成："}
+    pt:{appName:"Matemática Simbólica",intro:"Cada símbolo é feito de partes: +, -, x e /. Subtrair remove partes do símbolo: ≡ (4 partes de -) − 1 parte = = (3 partes de -). Se a composição resultante não tiver símbolo… Não definido.",labelExpr:"Escreve a tua operação — os operadores vão entre aspas",btnCalc:"Calcular",examples:"Experimenta:",catalogHeading:"Catálogo de símbolos",createHeading:"Criar símbolo",symbolPlaceholder:"Símbolo",btnAdd:"Adicionar ao catálogo",rulesHeading:"Regras do sistema",noDefined:"Não definido",empty:"vazio",resultComposition:"Composição do resultado:"},
+    fr:{appName:"Mathématiques Symboliques",intro:"Chaque symbole est composé de parties : +, -, x et /. Soustraire retire des parties du symbole : ≡ (4 parties de -) − 1 partie = = (3 parties de -). Si la composition obtenue n’a pas de symbole… Non défini.",labelExpr:"Écris ton opération — les opérateurs vont entre guillemets",btnCalc:"Calculer",examples:"Essaie :",catalogHeading:"Catalogue de symboles",createHeading:"Créer un symbole",symbolPlaceholder:"Symbole",btnAdd:"Ajouter au catalogue",rulesHeading:"Règles du système",noDefined:"Non défini",empty:"vide",resultComposition:"Composition du résultat :"},
+    de:{appName:"Symbolische Mathematik",intro:"Jedes Symbol besteht aus Teilen: +, -, x und /. Subtrahieren entfernt Teile vom Symbol: ≡ (4 Teile von -) − 1 Teil = = (3 Teile von -). Gibt es für die Zusammensetzung kein Symbol … Nicht definiert.",labelExpr:"Schreibe deine Operation — Operatoren in Anführungszeichen",btnCalc:"Berechnen",examples:"Probiere:",catalogHeading:"Symbolkatalog",createHeading:"Symbol erstellen",symbolPlaceholder:"Symbol",btnAdd:"Zum Katalog hinzufügen",rulesHeading:"Systemregeln",noDefined:"Nicht definiert",empty:"leer",resultComposition:"Zusammensetzung des Ergebnisses:"},
+    it:{appName:"Matematica Simbolica",intro:"Ogni simbolo è formato da parti: +, -, x e /. Sottrarre rimuove parti dal simbolo: ≡ (4 parti di -) − 1 parte = = (3 parti di -). Se la composizione ottenuta non ha simbolo… Non definito.",labelExpr:"Scrivi la tua operazione — gli operatori vanno tra virgolette",btnCalc:"Calcola",examples:"Prova:",catalogHeading:"Catalogo dei simboli",createHeading:"Crea simbolo",symbolPlaceholder:"Simbolo",btnAdd:"Aggiungi al catalogo",rulesHeading:"Regole del sistema",noDefined:"Non definito",empty:"vuoto",resultComposition:"Composizione del risultato:"},
+    nl:{appName:"Symbolische Wiskunde",intro:"Elk symbool bestaat uit delen: +, -, x en /. Aftrekken verwijdert delen van een symbool: ≡ (4 delen van -) − 1 deel = = (3 delen van -). Als de samenstelling geen symbool heeft… Niet gedefinieerd.",labelExpr:"Schrijf je bewerking — operatoren tussen aanhalingstekens",btnCalc:"Berekenen",examples:"Probeer:",catalogHeading:"Symbolencatalogus",createHeading:"Symbool maken",symbolPlaceholder:"Symbool",btnAdd:"Toevoegen aan catalogus",rulesHeading:"Systeemregels",noDefined:"Niet gedefinieerd",empty:"leeg",resultComposition:"Samenstelling van het resultaat:"},
+    pl:{appName:"Matematyka Symboliczna",intro:"Każdy symbol składa się z części: +, -, x i /. Odejmowanie usuwa części symbolu: ≡ (4 części -) − 1 część = = (3 części -). Jeśli wynikowa kompozycja nie ma symbolu… Niezdefiniowane.",labelExpr:"Wpisz działanie — operatory w cudzysłowach",btnCalc:"Oblicz",examples:"Wypróbuj:",catalogHeading:"Katalog symboli",createHeading:"Utwórz symbol",symbolPlaceholder:"Symbol",btnAdd:"Dodaj do katalogu",rulesHeading:"Zasady systemu",noDefined:"Niezdefiniowane",empty:"puste",resultComposition:"Skład wyniku:"},
+    cs:{appName:"Symbolická matematika",intro:"Každý symbol se skládá z částí: +, -, x a /. Odečítání odebírá části symbolu: ≡ (4 části -) − 1 část = = (3 části -). Pokud výsledná skladba nemá symbol… Nedefinováno.",labelExpr:"Napiš operaci — operátory v uvozovkách",btnCalc:"Vypočítat",examples:"Vyzkoušej:",catalogHeading:"Katalog symbolů",createHeading:"Vytvořit symbol",symbolPlaceholder:"Symbol",btnAdd:"Přidat do katalogu",rulesHeading:"Pravidla systému",noDefined:"Nedefinováno",empty:"prázdné",resultComposition:"Složení výsledku:"},
+    sk:{appName:"Symbolická matematika",intro:"Každý symbol sa skladá z častí: +, -, x a /. Odčítanie odoberá časti symbolu: ≡ (4 časti -) − 1 časť = = (3 časti -). Ak výsledná skladba nemá symbol… Nedefinované.",labelExpr:"Napíš operáciu — operátory v úvodzovkách",btnCalc:"Vypočítať",examples:"Vyskúšaj:",catalogHeading:"Katalóg symbolov",createHeading:"Vytvoriť symbol",symbolPlaceholder:"Symbol",btnAdd:"Pridať do katalógu",rulesHeading:"Pravidlá systému",noDefined:"Nedefinované",empty:"prázdne",resultComposition:"Zloženie výsledku:"},
+    hu:{appName:"Szimbolikus matematika",intro:"Minden szimbólum részekből áll: +, -, x és /. A kivonás részeket távolít el a szimbólumból: ≡ (4 db -) − 1 db = = (3 db -). Ha a kapott összetételhez nincs szimbólum… Nem definiált.",labelExpr:"Írd be a műveletet — az operátorok idézőjelben",btnCalc:"Számítás",examples:"Próbáld:",catalogHeading:"Szimbólumkatalógus",createHeading:"Szimbólum létrehozása",symbolPlaceholder:"Szimbólum",btnAdd:"Hozzáadás a katalógushoz",rulesHeading:"Rendszerszabályok",noDefined:"Nem definiált",empty:"üres",resultComposition:"Az eredmény összetétele:"},
+    ro:{appName:"Matematică simbolică",intro:"Fiecare simbol este format din părți: +, -, x și /. Scăderea elimină părți din simbol: ≡ (4 părți -) − 1 parte = = (3 părți -). Dacă compoziția rezultată nu are simbol… Nedefinit.",labelExpr:"Scrie operația — operatorii între ghilimele",btnCalc:"Calculează",examples:"Încearcă:",catalogHeading:"Catalog de simboluri",createHeading:"Creează simbol",symbolPlaceholder:"Simbol",btnAdd:"Adaugă în catalog",rulesHeading:"Regulile sistemului",noDefined:"Nedefinit",empty:"gol",resultComposition:"Compoziția rezultatului:"},
+    bg:{appName:"Символна математика",intro:"Всеки символ се състои от части: +, -, x и /. Изваждането премахва части от символа: ≡ (4 части -) − 1 част = = (3 части -). Ако получената композиция няма символ… Неопределено.",labelExpr:"Напиши операцията — операторите в кавички",btnCalc:"Изчисли",examples:"Опитай:",catalogHeading:"Каталог на символите",createHeading:"Създай символ",symbolPlaceholder:"Символ",btnAdd:"Добави в каталога",rulesHeading:"Правила на системата",noDefined:"Неопределено",empty:"празно",resultComposition:"Състав на резултата:"},
+    uk:{appName:"Символьна математика",intro:"Кожен символ складається з частин: +, -, x і /. Віднімання прибирає частини символу: ≡ (4 частини -) − 1 частина = = (3 частини -). Якщо отримана композиція не має символу… Не визначено.",labelExpr:"Введи операцію — оператори в лапках",btnCalc:"Обчислити",examples:"Спробуй:",catalogHeading:"Каталог символів",createHeading:"Створити символ",symbolPlaceholder:"Символ",btnAdd:"Додати до каталогу",rulesHeading:"Правила системи",noDefined:"Не визначено",empty:"порожньо",resultComposition:"Склад результату:"},
+    ru:{appName:"Символьная математика",intro:"Каждый символ состоит из частей: +, -, x и /. Вычитание убирает части символа: ≡ (4 части -) − 1 часть = = (3 части -). Если полученная композиция не имеет символа… Не определено.",labelExpr:"Введи операцию — операторы в кавычках",btnCalc:"Вычислить",examples:"Попробуй:",catalogHeading:"Каталог символов",createHeading:"Создать символ",symbolPlaceholder:"Символ",btnAdd:"Добавить в каталог",rulesHeading:"Правила системы",noDefined:"Не определено",empty:"пусто",resultComposition:"Состав результата:"},
+    sr:{appName:"Симболичка математика",intro:"Сваки симбол се састоји од делова: +, -, x и /. Одузимање уклања делове симбола: ≡ (4 дела -) − 1 део = = (3 дела -). Ако добијена композиција нема симбол… Није дефинисано.",labelExpr:"Упиши операцију — оператори под наводницима",btnCalc:"Израчунај",examples:"Пробај:",catalogHeading:"Каталог симбола",createHeading:"Направи симбол",symbolPlaceholder:"Симбол",btnAdd:"Додај у каталог",rulesHeading:"Правила система",noDefined:"Није дефинисано",empty:"празно",resultComposition:"Састав резултата:"},
+    hr:{appName:"Simbolička matematika",intro:"Svaki se simbol sastoji od dijelova: +, -, x i /. Oduzimanje uklanja dijelove simbola: ≡ (4 dijela -) − 1 dio = = (3 dijela -). Ako dobiveni sastav nema simbol… Nedefinirano.",labelExpr:"Upiši operaciju — operatori pod navodnicima",btnCalc:"Izračunaj",examples:"Pokušaj:",catalogHeading:"Katalog simbola",createHeading:"Stvori simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj u katalog",rulesHeading:"Pravila sustava",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sastav rezultata:"},
+    sl:{appName:"Simbolična matematika",intro:"Vsak simbol je sestavljen iz delov: +, -, x in /. Odštevanje odstrani dele simbola: ≡ (4 deli -) − 1 del = = (3 deli -). Če dobljena sestava nima simbola… Nedefinirano.",labelExpr:"Vpiši operacijo — operatorji v narekovajih",btnCalc:"Izračunaj",examples:"Poskusi:",catalogHeading:"Katalog simbolov",createHeading:"Ustvari simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj v katalog",rulesHeading:"Pravila sistema",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sestava rezultata:"},
+    bs:{appName:"Simbolička matematika",intro:"Svaki simbol se sastoji od dijelova: +, -, x i /. Oduzimanje uklanja dijelove simbola: ≡ (4 dijela -) − 1 dio = = (3 dijela -). Ako dobijeni sastav nema simbol… Nedefinirano.",labelExpr:"Upiši operaciju — operatori pod navodnicima",btnCalc:"Izračunaj",examples:"Pokušaj:",catalogHeading:"Katalog simbola",createHeading:"Napravi simbol",symbolPlaceholder:"Simbol",btnAdd:"Dodaj u katalog",rulesHeading:"Pravila sistema",noDefined:"Nedefinirano",empty:"prazno",resultComposition:"Sastav rezultata:"},
+    mk:{appName:"Симболична математика",intro:"Секој симбол се состои од делови: +, -, x и /. Одземањето отстранува делови од симболот: ≡ (4 дела -) − 1 дел = = (3 дела -). Ако добиената композиција нема симбол… Недефинирано.",labelExpr:"Внеси операција — операторите во наводници",btnCalc:"Пресметај",examples:"Пробај:",catalogHeading:"Каталог на симболи",createHeading:"Создај симбол",symbolPlaceholder:"Симбол",btnAdd:"Додај во каталогот",rulesHeading:"Правила на системот",noDefined:"Недефинирано",empty:"празно",resultComposition:"Состав на резултатот:"},
+    sq:{appName:"Matematikë simbolike",intro:"Çdo simbol përbëhet nga pjesë: +, -, x dhe /. Zbritja heq pjesë nga simboli: ≡ (4 pjesë -) − 1 pjesë = = (3 pjesë -). Nëse përbërja e marrë nuk ka simbol… E padefinuar.",labelExpr:"Shkruaj veprimin — operatorët mes thonjëzave",btnCalc:"Llogarit",examples:"Provo:",catalogHeading:"Katalogu i simboleve",createHeading:"Krijo simbol",symbolPlaceholder:"Simbol",btnAdd:"Shto në katalog",rulesHeading:"Rregullat e sistemit",noDefined:"E padefinuar",empty:"bosh",resultComposition:"Përbërja e rezultatit:"},
+    el:{appName:"Συμβολικά Μαθηματικά",intro:"Κάθε σύμβολο αποτελείται από μέρη: +, -, x και /. Η αφαίρεση αφαιρεί μέρη από το σύμβολο: ≡ (4 μέρη -) − 1 μέρος = = (3 μέρη -). Αν η σύνθεση δεν έχει σύμβολο… Μη ορισμένο.",labelExpr:"Γράψε την πράξη — οι τελεστές σε εισαγωγικά",btnCalc:"Υπολογισμός",examples:"Δοκίμασε:",catalogHeading:"Κατάλογος συμβόλων",createHeading:"Δημιουργία συμβόλου",symbolPlaceholder:"Σύμβολο",btnAdd:"Προσθήκη στον κατάλογο",rulesHeading:"Κανόνες συστήματος",noDefined:"Μη ορισμένο",empty:"κενό",resultComposition:"Σύνθεση αποτελέσματος:"},
+    tr:{appName:"Sembolik Matematik",intro:"Her sembol parçalardan oluşur: +, -, x ve /. Çıkarma sembolden parça çıkarır: ≡ (4 - parçası) − 1 parça = = (3 - parçası). Oluşan bileşimin sembolü yoksa… Tanımsız.",labelExpr:"İşlemini yaz — operatörler tırnak içinde",btnCalc:"Hesapla",examples:"Dene:",catalogHeading:"Sembol kataloğu",createHeading:"Sembol oluştur",symbolPlaceholder:"Sembol",btnAdd:"Kataloğa ekle",rulesHeading:"Sistem kuralları",noDefined:"Tanımsız",empty:"boş",resultComposition:"Sonucun bileşimi:"},
+    az:{appName:"Simvolik Riyaziyyat",intro:"Hər simvol hissələrdən ibarətdir: +, -, x və /. Çıxma simvoldan hissə çıxarır: ≡ (4 - hissəsi) − 1 hissə = = (3 - hissəsi). Alınan birləşmənin simvolu yoxdursa… Təyin olunmayıb.",labelExpr:"Əməliyyatı yaz — operatorlar dırnaq içində",btnCalc:"Hesabla",examples:"Yoxla:",catalogHeading:"Simvollar kataloqu",createHeading:"Simvol yarat",symbolPlaceholder:"Simvol",btnAdd:"Kataloqa əlavə et",rulesHeading:"Sistem qaydaları",noDefined:"Təyin olunmayıb",empty:"boş",resultComposition:"Nəticənin tərkibi:"},
+    kk:{appName:"Символдық математика",intro:"Әр символ бөліктерден тұрады: +, -, x және /. Азайту символдан бөліктерді алып тастайды: ≡ (4 - бөлігі) − 1 бөлік = = (3 - бөлігі). Алынған құрамда символ болмаса… Анықталмаған.",labelExpr:"Амалды жаз — операторлар тырнақшада",btnCalc:"Есептеу",examples:"Байқап көр:",catalogHeading:"Символдар каталогы",createHeading:"Символ жасау",symbolPlaceholder:"Символ",btnAdd:"Каталогқа қосу",rulesHeading:"Жүйе ережелері",noDefined:"Анықталмаған",empty:"бос",resultComposition:"Нәтиженің құрамы:"},
+    uz:{appName:"Simvolik matematika",intro:"Har bir simvol qismlardan iborat: +, -, x va /. Ayirish simvoldan qismlarni olib tashlaydi: ≡ (4 - qismi) − 1 qism = = (3 - qismi). Hosil bo‘lgan tarkibda simvol bo‘lmasa… Aniqlanmagan.",labelExpr:"Amalni yoz — operatorlar qo‘shtirnoq ichida",btnCalc:"Hisoblash",examples:"Sinab ko‘r:",catalogHeading:"Simvollar katalogi",createHeading:"Simvol yaratish",symbolPlaceholder:"Simvol",btnAdd:"Katalogga qo‘shish",rulesHeading:"Tizim qoidalari",noDefined:"Aniqlanmagan",empty:"bo‘sh",resultComposition:"Natija tarkibi:"},
+    ky:{appName:"Символдук математика",intro:"Ар бир символ бөлүктөрдөн турат: +, -, x жана /. Кемитүү символдон бөлүктөрдү алып салат: ≡ (4 - бөлүгү) − 1 бөлүк = = (3 - бөлүгү). Алынган курамда символ жок болсо… Аныкталган эмес.",labelExpr:"Амалды жаз — операторлор тырмакчада",btnCalc:"Эсептөө",examples:"Сынап көр:",catalogHeading:"Символдор каталогу",createHeading:"Символ жасоо",symbolPlaceholder:"Символ",btnAdd:"Каталогго кошуу",rulesHeading:"Система эрежелери",noDefined:"Аныкталган эмес",empty:"бош",resultComposition:"Натыйжанын курамы:"},
+    tt:{appName:"Символлык математика",intro:"Һәр символ өлешләрдән тора: +, -, x һәм /. Алу символдан өлешләрне бетерә: ≡ (4 - өлеше) − 1 өлеш = = (3 - өлеше). Алынган составта символ булмаса… Билгеләнмәгән.",labelExpr:"Гамәлне яз — операторлар тырнак эчендә",btnCalc:"Исәпләү",examples:"Сынап кара:",catalogHeading:"Символлар каталогы",createHeading:"Символ ясау",symbolPlaceholder:"Символ",btnAdd:"Каталогка өстәү",rulesHeading:"Система кагыйдәләре",noDefined:"Билгеләнмәгән",empty:"буш",resultComposition:"Нәтиҗә составы:"},
+    hy:{appName:"Սիմվոլային մաթեմատիկա",intro:"Յուրաքանչյուր սիմվոլ կազմված է մասերից՝ +, -, x և /. Հանումը հեռացնում է մասեր սիմվոլից՝ ≡ (4 - մաս) − 1 մաս = = (3 - մաս)։ Եթե ստացված կազմը սիմվոլ չունի… Չսահմանված։",labelExpr:"Գրիր գործողությունը — օպերատորները չակերտների մեջ",btnCalc:"Հաշվել",examples:"Փորձիր՝",catalogHeading:"Սիմվոլների կատալոգ",createHeading:"Ստեղծել սիմվոլ",symbolPlaceholder:"Սիմվոլ",btnAdd:"Ավելացնել կատալոգ",rulesHeading:"Համակարգի կանոններ",noDefined:"Չսահմանված",empty:"դատարկ",resultComposition:"Արդյունքի կազմը՝"},
+    ka:{appName:"სიმბოლური მათემატიკა",intro:"თითოეული სიმბოლო შედგება ნაწილებისგან: +, -, x და /. გამოკლება შლის ნაწილებს სიმბოლოდან: ≡ (4 - ნაწილი) − 1 ნაწილი = = (3 - ნაწილი). თუ მიღებულ შემადგენლობას სიმბოლო არ აქვს… განუსაზღვრელი.",labelExpr:"ჩაწერე ოპერაცია — ოპერატორები ბრჭყალებში",btnCalc:"გამოთვლა",examples:"სცადე:",catalogHeading:"სიმბოლოების კატალოგი",createHeading:"სიმბოლოს შექმნა",symbolPlaceholder:"სიმბოლო",btnAdd:"კატალოგში დამატება",rulesHeading:"სისტემის წესები",noDefined:"განუსაზღვრელი",empty:"ცარიელი",resultComposition:"შედეგის შემადგენლობა:"},
+    he:{appName:"מתמטיקה סמלית",intro:"כל סמל מורכב מחלקים: +, -, x ו־/. חיסור מסיר חלקים מהסמל: ≡ (4 חלקי -) − 1 חלק = = (3 חלקי -). אם להרכב המתקבל אין סמל… לא מוגדר.",labelExpr:"כתוב את הפעולה — האופרטורים במרכאות",btnCalc:"חשב",examples:"נסה:",catalogHeading:"קטלוג סמלים",createHeading:"יצירת סמל",symbolPlaceholder:"סמל",btnAdd:"הוסף לקטלוג",rulesHeading:"כללי המערכת",noDefined:"לא מוגדר",empty:"ריק",resultComposition:"הרכב התוצאה:"},
+    ar:{appName:"الرياضيات الرمزية",intro:"كل رمز يتكون من أجزاء: + و - و x و /. الطرح يزيل أجزاءً من الرمز: ≡ (4 أجزاء من -) − جزء واحد = = (3 أجزاء من -). إذا لم يكن للتركيب الناتج رمز… غير معرّف.",labelExpr:"اكتب عمليتك — توضع المعاملات بين علامتي اقتباس",btnCalc:"احسب",examples:"جرّب:",catalogHeading:"فهرس الرموز",createHeading:"إنشاء رمز",symbolPlaceholder:"رمز",btnAdd:"أضف إلى الفهرس",rulesHeading:"قواعد النظام",noDefined:"غير معرّف",empty:"فارغ",resultComposition:"تركيب النتيجة:"},
+    fa:{appName:"ریاضیات نمادی",intro:"هر نماد از بخش‌ها ساخته می‌شود: +، -، x و /. تفریق بخش‌هایی را از نماد حذف می‌کند: ≡ (4 بخش -) − 1 بخش = = (3 بخش -). اگر ترکیب به‌دست‌آمده نماد نداشته باشد… تعریف‌نشده.",labelExpr:"عملیات را بنویس — عملگرها داخل گیومه",btnCalc:"محاسبه",examples:"امتحان کن:",catalogHeading:"فهرست نمادها",createHeading:"ساخت نماد",symbolPlaceholder:"نماد",btnAdd:"افزودن به فهرست",rulesHeading:"قواعد سیستم",noDefined:"تعریف‌نشده",empty:"خالی",resultComposition:"ترکیب نتیجه:"},
+    ur:{appName:"علامتی ریاضیات",intro:"ہر علامت حصوں سے بنتی ہے: +، -، x اور /. تفریق علامت سے حصے ہٹاتی ہے: ≡ (4 حصے -) − 1 حصہ = = (3 حصے -)۔ اگر بننے والی ترکیب کی علامت نہ ہو… غیر متعین۔",labelExpr:"اپنا عمل لکھیں — آپریٹرز اقتباس میں",btnCalc:"حساب کریں",examples:"آزمائیں:",catalogHeading:"علامتوں کی فہرست",createHeading:"علامت بنائیں",symbolPlaceholder:"علامت",btnAdd:"فہرست میں شامل کریں",rulesHeading:"نظام کے قواعد",noDefined:"غیر متعین",empty:"خالی",resultComposition:"نتیجے کی ترکیب:"},
+    hi:{appName:"प्रतीकात्मक गणित",intro:"हर प्रतीक भागों से बनता है: +, -, x और /. घटाना प्रतीक से भाग हटाता है: ≡ (4 भाग -) − 1 भाग = = (3 भाग -)। अगर बनी संरचना का प्रतीक न हो… अपरिभाषित।",labelExpr:"अपनी क्रिया लिखें — ऑपरेटर उद्धरण चिह्नों में",btnCalc:"गणना करें",examples:"आज़माएँ:",catalogHeading:"प्रतीक सूची",createHeading:"प्रतीक बनाएँ",symbolPlaceholder:"प्रतीक",btnAdd:"सूची में जोड़ें",rulesHeading:"सिस्टम के नियम",noDefined:"अपरिभाषित",empty:"खाली",resultComposition:"परिणाम की संरचना:"},
+    bn:{appName:"প্রতীকী গণিত",intro:"প্রতিটি প্রতীক অংশ দিয়ে তৈরি: +, -, x এবং /. বিয়োগ প্রতীক থেকে অংশ সরায়: ≡ (4 অংশ -) − 1 অংশ = = (3 অংশ -)। যদি তৈরি 구성ে প্রতীক না থাকে… অনির্ধারিত।",labelExpr:"তোমার কাজ লেখো — অপারেটরগুলো উদ্ধৃতি চিহ্নে",btnCalc:"গণনা করো",examples:"চেষ্টা করো:",catalogHeading:"প্রতীক তালিকা",createHeading:"প্রতীক তৈরি করো",symbolPlaceholder:"প্রতীক",btnAdd:"তালিকায় যোগ করো",rulesHeading:"সিস্টেমের নিয়ম",noDefined:"অনির্ধারিত",empty:"খালি",resultComposition:"ফলাফলের 구성:"},
+    pa:{appName:"ਪ੍ਰਤੀਕਾਤਮਕ ਗਣਿਤ",intro:"ਹਰ ਪ੍ਰਤੀਕ ਹਿੱਸਿਆਂ ਨਾਲ ਬਣਦਾ ਹੈ: +, -, x ਅਤੇ /. ਘਟਾਉਣਾ ਪ੍ਰਤੀਕ ਤੋਂ ਹਿੱਸੇ ਹਟਾਉਂਦਾ ਹੈ: ≡ (4 ਹਿੱਸੇ -) − 1 ਹਿੱਸਾ = = (3 ਹਿੱਸੇ -)। ਜੇ ਬਣੀ ਬਣਤਰ ਦਾ ਪ੍ਰਤੀਕ ਨਾ ਹੋਵੇ… ਅਣ-ਪਰਿਭਾਸ਼ਿਤ।",labelExpr:"ਆਪਣੀ ਕਿਰਿਆ ਲਿਖੋ — ਆਪਰੇਟਰ ਉਧਰਣ ਚਿੰਨ੍ਹਾਂ ਵਿੱਚ",btnCalc:"ਗਿਣੋ",examples:"ਆਜ਼ਮਾਓ:",catalogHeading:"ਪ੍ਰਤੀਕ ਸੂਚੀ",createHeading:"ਪ੍ਰਤੀਕ ਬਣਾਓ",symbolPlaceholder:"ਪ੍ਰਤੀਕ",btnAdd:"ਸੂਚੀ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ",rulesHeading:"ਸਿਸਟਮ ਦੇ ਨਿਯਮ",noDefined:"ਅਣ-ਪਰਿਭਾਸ਼ਿਤ",empty:"ਖਾਲੀ",resultComposition:"ਨਤੀਜੇ ਦੀ ਬਣਤਰ:"},
+    gu:{appName:"પ્રતીકાત્મક ગણિત",intro:"દરેક પ્રતીક ભાગોથી બને છે: +, -, x અને /. બાદબાકી પ્રતીકમાંથી ભાગ દૂર કરે છે: ≡ (4 ભાગ -) − 1 ભાગ = = (3 ભાગ -). જો બનેલી રચનાનું પ્રતીક ન હોય… અવ્યાખ્યાયિત.",labelExpr:"તમારી ક્રિયા લખો — ઓપરેટરો અવતરણ ચિહ્નમાં",btnCalc:"ગણતરી કરો",examples:"પ્રયાસ કરો:",catalogHeading:"પ્રતીક સૂચિ",createHeading:"પ્રતીક બનાવો",symbolPlaceholder:"પ્રતીક",btnAdd:"સૂચિમાં ઉમેરો",rulesHeading:"સિસ્ટમના નિયમો",noDefined:"અવ્યાખ્યાયિત",empty:"ખાલી",resultComposition:"પરિણામની રચના:"},
+    mr:{appName:"प्रतीकात्मक गणित",intro:"प्रत्येक प्रतीक भागांपासून बनते: +, -, x आणि /. वजाबाकी प्रतीकातून भाग काढते: ≡ (4 भाग -) − 1 भाग = = (3 भाग -). तयार झालेल्या रचनेचे प्रतीक नसल्यास… अपरिभाषित.",labelExpr:"तुमची क्रिया लिहा — ऑपरेटर अवतरण चिन्हांत",btnCalc:"गणना करा",examples:"वापरून पहा:",catalogHeading:"प्रतीक सूची",createHeading:"प्रतीक तयार करा",symbolPlaceholder:"प्रतीक",btnAdd:"सूचीत जोडा",rulesHeading:"सिस्टमचे नियम",noDefined:"अपरिभाषित",empty:"रिकामे",resultComposition:"निकालाची रचना:"},
+    ta:{appName:"குறியீட்டு கணிதம்",intro:"ஒவ்வொரு குறியீடும் பகுதிகளால் ஆனது: +, -, x மற்றும் /. கழித்தல் குறியீட்டிலிருந்து பகுதிகளை நீக்குகிறது: ≡ (4 பகுதிகள் -) − 1 பகுதி = = (3 பகுதிகள் -). உருவான கலவைக்கு குறியீடு இல்லையெனில்… வரையறுக்கப்படாதது.",labelExpr:"உங்கள் செயல்பாட்டை எழுதுங்கள் — இயக்கிகள் மேற்கோள்களில்",btnCalc:"கணக்கிடு",examples:"முயற்சி செய்:",catalogHeading:"குறியீடுகள் பட்டியல்",createHeading:"குறியீடு உருவாக்கு",symbolPlaceholder:"குறியீடு",btnAdd:"பட்டியலில் சேர்",rulesHeading:"அமைப்பு விதிகள்",noDefined:"வரையறுக்கப்படாதது",empty:"காலி",resultComposition:"முடிவின் கலவை:"},
+    te:{appName:"చిహ్న గణితం",intro:"ప్రతి చిహ్నం భాగాలతో ఏర్పడుతుంది: +, -, x మరియు /. తీసివేత చిహ్నం నుండి భాగాలను తొలగిస్తుంది: ≡ (4 భాగాలు -) − 1 భాగం = = (3 భాగాలు -). ఏర్పడిన కూర్పుకు చిహ్నం లేకపోతే… నిర్వచించబడలేదు.",labelExpr:"మీ క్రియను రాయండి — ఆపరేటర్లు కోట్లలో",btnCalc:"లెక్కించు",examples:"ప్రయత్నించు:",catalogHeading:"చిహ్నాల జాబితా",createHeading:"చిహ్నం సృష్టించు",symbolPlaceholder:"చిహ్నం",btnAdd:"జాబితాలో చేర్చు",rulesHeading:"వ్యవస్థ నియమాలు",noDefined:"నిర్వచించబడలేదు",empty:"ఖాళీ",resultComposition:"ఫలితం కూర్పు:"},
+    kn:{appName:"ಸಾಂಕೇತಿಕ ಗಣಿತ",intro:"ಪ್ರತಿ ಸಂಕೇತವು ಭಾಗಗಳಿಂದ ಮಾಡಲ್ಪಟ್ಟಿದೆ: +, -, x ಮತ್ತು /. ವ್ಯವಕಲನವು ಸಂಕೇತದಿಂದ ಭಾಗಗಳನ್ನು ತೆಗೆದುಹಾಕುತ್ತದೆ: ≡ (4 ಭಾಗಗಳು -) − 1 ಭಾಗ = = (3 ಭಾಗಗಳು -). ರೂಪುಗೊಂಡ ಸಂಯೋಜನೆಗೆ ಸಂಕೇತವಿಲ್ಲದಿದ್ದರೆ… ವ್ಯಾಖ್ಯಾನಿಸಲಾಗಿಲ್ಲ.",labelExpr:"ನಿಮ್ಮ ಕ್ರಿಯೆಯನ್ನು ಬರೆಯಿರಿ — ಆಪರೇಟರ್‌ಗಳು ಉದ್ಧರಣ ಚಿಹ್ನೆಗಳಲ್ಲಿ",btnCalc:"ಲೆಕ್ಕಹಾಕು",examples:"ಪ್ರಯತ್ನಿಸಿ:",catalogHeading:"ಸಂಕೇತಗಳ ಪಟ್ಟಿ",createHeading:"ಸಂಕೇತ ರಚಿಸಿ",symbolPlaceholder:"ಸಂಕೇತ",btnAdd:"ಪಟ್ಟಿಗೆ ಸೇರಿಸಿ",rulesHeading:"ವ್ಯವಸ್ಥೆಯ ನಿಯಮಗಳು",noDefined:"ವ್ಯಾಖ್ಯಾನಿಸಲಾಗಿಲ್ಲ",empty:"ಖಾಲಿ",resultComposition:"ಫಲಿತಾಂಶದ ಸಂಯೋಜನೆ:"},
+    ml:{appName:"പ്രതീക ഗണിതം",intro:"ഓരോ പ്രതീകവും ഭാഗങ്ങൾ കൊണ്ട് നിർമ്മിച്ചതാണ്: +, -, x, /. കുറയ്ക്കൽ പ്രതീകത്തിൽ നിന്ന് ഭാഗങ്ങൾ നീക്കുന്നു: ≡ (4 ഭാഗങ്ങൾ -) − 1 ഭാഗം = = (3 ഭാഗങ്ങൾ -). ഉണ്ടാകുന്ന ഘടനയ്ക്ക് പ്രതീകമില്ലെങ്കിൽ… നിർവചിക്കപ്പെടാത്തത്.",labelExpr:"നിങ്ങളുടെ പ്രവർത്തനം എഴുതുക — ഓപ്പറേറ്ററുകൾ ഉദ്ധരണികളിൽ",btnCalc:"കണക്കാക്കുക",examples:"പരീക്ഷിക്കുക:",catalogHeading:"പ്രതീക പട്ടിക",createHeading:"പ്രതീകം സൃഷ്ടിക്കുക",symbolPlaceholder:"പ്രതീകം",btnAdd:"പട്ടികയിൽ ചേർക്കുക",rulesHeading:"സിസ്റ്റം നിയമങ്ങൾ",noDefined:"നിർവചിക്കപ്പെടാത്തത്",empty:"ശൂന്യം",resultComposition:"ഫലത്തിന്റെ ഘടന:"},
+    si:{appName:"සංකේත ගණිතය",intro:"සෑම සංකේතයක්ම කොටස් වලින් සෑදී ඇත: +, -, x සහ /. අඩු කිරීම සංකේතයෙන් කොටස් ඉවත් කරයි: ≡ (4 කොටස් -) − 1 කොටස = = (3 කොටස් -). සෑදෙන සංයුතියට සංකේතයක් නොමැති නම්… අර්ථ දක්වා නැත.",labelExpr:"ඔබේ ක්‍රියාව ලියන්න — ක්‍රියාකරුවන් උද්ධෘත ලකුණු තුළ",btnCalc:"ගණනය කරන්න",examples:"උත්සාහ කරන්න:",catalogHeading:"සංකේත ලැයිස්තුව",createHeading:"සංකේතයක් සාදන්න",symbolPlaceholder:"සංකේතය",btnAdd:"ලැයිස්තුවට එකතු කරන්න",rulesHeading:"පද්ධති නීති",noDefined:"අර්ථ දක්වා නැත",empty:"හිස්",resultComposition:"ප්‍රතිඵලයේ සංයුතිය:"},
+    th:{appName:"คณิตศาสตร์เชิงสัญลักษณ์",intro:"แต่ละสัญลักษณ์ประกอบด้วยส่วนต่าง ๆ: +, -, x และ /. การลบจะเอาส่วนออกจากสัญลักษณ์: ≡ (4 ส่วน -) − 1 ส่วน = = (3 ส่วน -) หากองค์ประกอบที่ได้ไม่มีสัญลักษณ์… ไม่นิยาม",labelExpr:"เขียนการดำเนินการ — ตัวดำเนินการอยู่ในเครื่องหมายคำพูด",btnCalc:"คำนวณ",examples:"ลอง:",catalogHeading:"แคตตาล็อกสัญลักษณ์",createHeading:"สร้างสัญลักษณ์",symbolPlaceholder:"สัญลักษณ์",btnAdd:"เพิ่มในแคตตาล็อก",rulesHeading:"กฎของระบบ",noDefined:"ไม่นิยาม",empty:"ว่าง",resultComposition:"องค์ประกอบของผลลัพธ์:"},
+    vi:{appName:"Toán học tượng trưng",intro:"Mỗi biểu tượng được tạo từ các phần: +, -, x và /. Phép trừ loại bỏ các phần khỏi biểu tượng: ≡ (4 phần -) − 1 phần = = (3 phần -). Nếu thành phần tạo ra không có biểu tượng… Không xác định.",labelExpr:"Viết phép toán — toán tử nằm trong dấu ngoặc kép",btnCalc:"Tính",examples:"Thử:",catalogHeading:"Danh mục biểu tượng",createHeading:"Tạo biểu tượng",symbolPlaceholder:"Biểu tượng",btnAdd:"Thêm vào danh mục",rulesHeading:"Quy tắc hệ thống",noDefined:"Không xác định",empty:"trống",resultComposition:"Thành phần của kết quả:"},
+    id:{appName:"Matematika Simbolik",intro:"Setiap simbol terdiri dari bagian: +, -, x, dan /. Pengurangan menghapus bagian dari simbol: ≡ (4 bagian -) − 1 bagian = = (3 bagian -). Jika komposisi yang dihasilkan tidak punya simbol… Tidak terdefinisi.",labelExpr:"Tulis operasimu — operator di dalam tanda kutip",btnCalc:"Hitung",examples:"Coba:",catalogHeading:"Katalog simbol",createHeading:"Buat simbol",symbolPlaceholder:"Simbol",btnAdd:"Tambahkan ke katalog",rulesHeading:"Aturan sistem",noDefined:"Tidak terdefinisi",empty:"kosong",resultComposition:"Komposisi hasil:"},
+    ja:{appName:"記号数学",intro:"各記号は +、-、x、/ の部分からできています。引き算は記号から部分を取り除きます: ≡ (4 つの -) − 1 つ = = (3 つの -)。できた構成に記号がなければ… 未定義です。",labelExpr:"演算を入力 — 演算子は引用符で囲む",btnCalc:"計算",examples:"試す:",catalogHeading:"記号カタログ",createHeading:"記号を作成",symbolPlaceholder:"記号",btnAdd:"カタログに追加",rulesHeading:"システムのルール",noDefined:"未定義",empty:"空",resultComposition:"結果の構成:"},
+    ko:{appName:"기호 수학",intro:"각 기호는 +, -, x, / 부분으로 이루어집니다. 뺄셈은 기호에서 부분을 제거합니다: ≡ (4개의 -) − 1개 = = (3개의 -). 만들어진 구성에 기호가 없으면… 정의되지 않음.",labelExpr:"연산을 입력하세요 — 연산자는 따옴표 안에",btnCalc:"계산",examples:"시도:",catalogHeading:"기호 목록",createHeading:"기호 만들기",symbolPlaceholder:"기호",btnAdd:"목록에 추가",rulesHeading:"시스템 규칙",noDefined:"정의되지 않음",empty:"비어 있음",resultComposition:"결과의 구성:"},
+    zh:{appName:"符号数学",intro:"每个符号由部分组成：+、-、x 和 /。减法会从符号中移除部分：≡（4 个 -）− 1 个 = =（3 个 -）。如果得到的组成没有对应符号……未定义。",labelExpr:"输入你的运算——运算符放在引号中",btnCalc:"计算",examples:"试试：",catalogHeading:"符号目录",createHeading:"创建符号",symbolPlaceholder:"符号",btnAdd:"添加到目录",rulesHeading:"系统规则",noDefined:"未定义",empty:"空",resultComposition:"结果的组成："}
   };
 
   /* =========================================================
@@ -450,19 +486,45 @@
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
+  /* -----------------------------------------------------------
+     CATÁLOGO POR DEFECTO — con los nuevos símbolos intermedios
+     para que la resta "quite una parte" correctamente:
+       -     = 1 parte de -
+       --    = 2 partes de -
+       =     = 3 partes de -    ← NUEVO (≡ − - = =)
+       ≡     = 4 partes de -
+       +     = 1 parte de +
+       ++    = 2 partes de +
+       +++   = 3 partes de +    ← NUEVO (# − + = +++)
+       #     = 4 partes de +
+       ##    = 8 partes de +
+       x     = 1 parte de x
+       xx    = 2 partes de x
+       xxx   = 3 partes de x    ← NUEVO (✖ − x = xxx)
+       ✖     = 4 partes de x
+       /     = 1 parte de /
+       //    = 2 partes de /
+       ///   = 3 partes de /    ← NUEVO (÷ − / = ///)
+       ÷     = 4 partes de /
+       ±     = 1 + y 1 -
+     ----------------------------------------------------------- */
   const DEFAULT_SYMBOLS = [
     ['+',    1,0,0,0],
     ['++',   2,0,0,0],
+    ['+++',  3,0,0,0],
     ['#',    4,0,0,0],
     ['##',   8,0,0,0],
     ['-',    0,1,0,0],
     ['--',   0,2,0,0],
+    ['=',    0,3,0,0],
     ['≡',    0,4,0,0],
     ['x',    0,0,1,0],
     ['xx',   0,0,2,0],
+    ['xxx',  0,0,3,0],
     ['✖',    0,0,4,0],
     ['/',    0,0,0,1],
     ['//',   0,0,0,2],
+    ['///',  0,0,0,3],
     ['÷',    0,0,0,4],
     ['±',    1,1,0,0]
   ];
@@ -604,12 +666,23 @@
   }
 
   /* =========================================================
-     RENDER
+     RENDER DE PARTES — muestra los glifos individuales
      ========================================================= */
-  function compHTML(v){
-    const parts = KEYS.filter(k => v[k] > 0)
-      .map(k => '<span class="c-' + CLS[k] + '">' + v[k] + ' ' + escapeHtml(k) + '</span>');
-    return parts.length ? parts.join('') : '<span style="color:var(--muted)">' + escapeHtml(t('empty')) + '</span>';
+  function partsAsPieces(v, extraClass){
+    const pieces = [];
+    KEYS.forEach(k => {
+      const n = v[k];
+      if (n > 0){
+        const cls = (extraClass || '') + ' p-' + CLS[k];
+        const glyph = escapeHtml(k);
+        for (let i = 0; i < n; i++){
+          pieces.push('<span class="piece ' + cls + '">' + glyph + '</span>');
+        }
+      }
+    });
+    return pieces.length
+      ? pieces.join('')
+      : '<span style="color:var(--muted)">' + escapeHtml(t('empty')) + '</span>';
   }
 
   function exprHTML(tokens){
@@ -624,7 +697,7 @@
     el.innerHTML = state.symbols.map(s =>
       '<div class="card-sym">' +
         '<div class="glyph">' + escapeHtml(s.sym) + '</div>' +
-        '<div class="comp">' + compHTML(s.v) + '</div>' +
+        '<div class="comp">' + partsAsPieces(s.v) + '</div>' +
       '</div>'
     ).join('');
   }
@@ -642,9 +715,16 @@
       ? '<span class="res-ok">' + escapeHtml(res.result) + '</span>'
       : '<span class="res-no">' + escapeHtml(t('noDefined')) + '</span>';
 
-    const nota = res.ok
-      ? '<div class="nota">' + escapeHtml(t('resultComposition')) + ' <b>' + escapeHtml(res.result) + '</b> → ' + compHTML(res.vec) + '</div>'
-      : '<div class="nota no">' + escapeHtml(t(res.reasonKey, res.vars)) + '</div>';
+    let nota;
+    if (res.ok){
+      // Composición visual del resultado
+      nota = '<div class="nota">' +
+        escapeHtml(t('resultComposition')) + ' <b>' + escapeHtml(res.result) + '</b>' +
+        ' <span class="comp-visual">' + partsAsPieces(res.vec) + '</span>' +
+      '</div>';
+    } else {
+      nota = '<div class="nota no">' + escapeHtml(t(res.reasonKey, res.vars)) + '</div>';
+    }
 
     box.innerHTML = '<div class="linea">' + izquierda + '<span class="eq">=</span>' + derecha + '</div>' + nota;
   }
